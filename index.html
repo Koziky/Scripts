@@ -1,9 +1,8 @@
-<!-- Save this as index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Koziky Game's</title>
   <style>
     * {
@@ -46,13 +45,12 @@
       background: #4c1d95;
       border-radius: 8px;
       text-align: center;
-      transition: background 0.3s, transform 0.2s;
+      transition: background 0.3s;
       cursor: pointer;
     }
 
     .sidebar ul li:hover {
-      background: #9333ea;
-      transform: scale(1.05);
+      background: #6d28d9;
     }
 
     .main-content {
@@ -204,9 +202,8 @@
     </header>
 
     <div class="games-container">
-      <!-- Game Card: Fast Food Rusher -->
       <div class="game-card" data-game="https://dnrweqffuwjtx.cloudfront.net/games/2025/unity/fast-food-rush/index.html">
-        <img class="game-icon" src="assets/fast-food-rusher.png" alt="Fast Food Rusher" onerror="this.src='https://via.placeholder.com/180x120?text=No+Image';">
+        <img class="game-icon" src="https://lh3.googleusercontent.com/fhn3O3PLDya_qadPxXdpf5gy5fP1nSh2wHZxmQV1PwLWQDIYTWm_aUKDv9YPHEIG6MKrqZJX885m5fJbtkpzBbDoRirYZAqt5mfUON0vHJf_tnpPTlC7Rpq_I2FGZOnQ-kmyKY6dyRs=w1280" alt="Fast Food Rusher">
         <div class="game-title">Fast Food Rusher</div>
         <div class="game-description">Serve customers and rush orders in this fast-paced food game!</div>
         <button class="play-button">Play Now</button>
@@ -228,14 +225,6 @@
     const gameFrame = document.getElementById('gameFrame');
 
     cards.forEach(card => {
-      const button = card.querySelector('.play-button');
-      button.addEventListener('click', e => {
-        e.stopPropagation();
-        const gameUrl = card.getAttribute('data-game');
-        gameFrame.src = gameUrl;
-        popup.style.display = 'flex';
-      });
-
       card.addEventListener('click', () => {
         const gameUrl = card.getAttribute('data-game');
         gameFrame.src = gameUrl;
