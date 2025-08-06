@@ -1,617 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 Unblock Games - Play Free Games Online</title>
-    <meta name="description" content="Play your favorite unblocked games anywhere, anytime! No restrictions, just pure gaming fun.">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎮 Koziky Game's - Play Free Games</title>
+  <meta name="description" content="Play your favorite games unblocked and free. No restrictions, just pure fun!">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #7c3aed 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <style>
+    /* RESET + BASE */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4c1d95, #6b21a8, #7c3aed);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: white;
+    }
 
-        /* Animated Background */
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 200px;
+      background: rgba(30, 0, 60, 0.8);
+      padding: 2rem 1rem;
+      z-index: 20;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.4);
+    }
+    .sidebar h2 {
+      font-size: 1.5rem;
+      color: #c4b5fd;
+      margin-bottom: 1rem;
+    }
+    .sidebar ul { list-style: none; }
+    .sidebar li {
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .sidebar li:hover,
+    .sidebar li.active {
+      background: #8b5cf6;
+    }
 
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
+    /* HEADER */
+    .header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      margin-left: 200px;
+    }
+    .title {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #a855f7, #ec4899, #06b6d4);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 3s ease infinite;
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      color: rgb(196 181 253);
+      max-width: 32rem;
+      margin: 0 auto;
+    }
 
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
+    /* GAMES GRID */
+    .games-container {
+      margin-left: 200px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
 
-        .shape:nth-child(1) {
-            width: 60px;
-            height: 60px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
+    .game-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 1rem;
+      padding: 1rem;
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.15);
+    }
+    .game-image {
+      width: 100%;
+      border-radius: 0.75rem;
+      height: 140px;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      background: #333;
+    }
+    .game-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
 
-        .shape:nth-child(2) {
-            width: 80px;
-            height: 80px;
-            top: 35%;
-            left: 30%;
-            animation-delay: 2s;
-        }
+    /* MODAL */
+    .game-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(15, 15, 30, 0.9);
+      z-index: 99;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+    }
+    .modal-content {
+      background: #1f1235;
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2rem;
+      position: relative;
+    }
+    .modal-img {
+      width: 240px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      background: #333;
+    }
+    .modal-info h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .modal-info p {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+    }
+    .fullscreen-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #7c3aed80;
+    }
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
 
-        .shape:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            top: 50%;
-            left: 50%;
-            animation-delay: 4s;
-        }
+    /* ANIMATIONS */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        .shape:nth-child(4) {
-            width: 120px;
-            height: 120px;
-            top: 65%;
-            left: 70%;
-            animation-delay: 1s;
-        }
-
-        .shape:nth-child(5) {
-            width: 140px;
-            height: 140px;
-            top: 80%;
-            left: 90%;
-            animation-delay: 3s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.7;
-            }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-                opacity: 1;
-            }
-        }
-
-        /* Particles */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            animation: particle-float 8s linear infinite;
-        }
-
-        @keyframes particle-float {
-            0% {
-                opacity: 0;
-                transform: translateY(100vh) scale(0);
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1);
-            }
-        }
-
-        /* Content Styles */
-        .content {
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: white;
-            animation: slideDown 1s ease-out;
-        }
-
-        .title {
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #a855f7, #ec4899, #06b6d4, #10b981);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        .subtitle {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            color: rgb(196 181 253);
-            max-width: 32rem;
-            margin: 0 auto;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Search */
-        .search-container {
-            max-width: 28rem;
-            margin: 0 auto 3rem auto;
-            padding: 0 1rem;
-            animation: fadeIn 2s ease-out;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid rgba(147, 51, 234, 0.3);
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            color: white;
-            font-size: 1.1rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-box::placeholder {
-            color: rgba(196, 181, 253, 0.6);
-        }
-
-        .search-box:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(147, 51, 234, 0.5);
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
-        }
-
-        /* Games Grid */
-        .games-container {
-            max-width: 72rem;
-            margin: 0 auto;
-            padding: 0 1rem 3rem 1rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .game-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            text-align: center;
-            color: white;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(147, 51, 234, 0.2);
-            position: relative;
-            overflow: hidden;
-            animation: cardSlideUp 0.8s ease-out both;
-        }
-
-        .game-card:nth-child(1) { animation-delay: 0.1s; }
-        .game-card:nth-child(2) { animation-delay: 0.2s; }
-        .game-card:nth-child(3) { animation-delay: 0.3s; }
-        .game-card:nth-child(4) { animation-delay: 0.4s; }
-        .game-card:nth-child(5) { animation-delay: 0.5s; }
-        .game-card:nth-child(6) { animation-delay: 0.6s; }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .game-card:hover::before {
-            left: 100%;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(147, 51, 234, 0.4);
-        }
-
-        @keyframes cardSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .game-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        .game-card:nth-child(even) .game-icon {
-            animation-delay: 1s;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            40% {
-                transform: translateY(-10px) scale(1.1);
-            }
-            60% {
-                transform: translateY(-5px) scale(1.05);
-            }
-        }
-
-        .game-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-
-        .game-description {
-            color: rgba(196, 181, 253, 0.8);
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-            line-height: 1.5;
-        }
-
-        .play-button {
-            background: linear-gradient(90deg, #7c3aed, #6366f1);
-            color: white;
-            border: none;
-            padding: 0.5rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            font-size: 0.875rem;
-        }
-
-        .play-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .play-button:hover::after {
-            width: 300px;
-            height: 300px;
-        }
-
-        .play-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(147, 51, 234, 0.3);
-            background: linear-gradient(90deg, #8b5cf6, #7c3aed);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: rgba(196, 181, 253, 0.6);
-            animation: fadeIn 2.5s ease-out;
-        }
-
-        /* No Results */
-        .no-results {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: rgba(196, 181, 253, 0.8);
-            font-size: 1.125rem;
-            grid-column: 1 / -1;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2.5rem;
-            }
-            
-            .games-container {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1rem;
-                padding: 0 1rem 2rem 1rem;
-            }
-            
-            .game-card {
-                padding: 1.25rem;
-            }
-
-            .header {
-                padding: 2rem 1rem;
-            }
-
-            .search-container {
-                margin-bottom: 2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .title {
-                font-size: 2rem;
-            }
-
-            .games-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .modal-content { flex-direction: column; align-items: center; }
+      .modal-img { width: 100%; height: auto; }
+      .content, .games-container, .header { margin-left: 0; }
+      .sidebar { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <div class="background-animation">
-        <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-        </div>
-        <div class="particles" id="particles"></div>
+
+  <aside class="sidebar">
+    <h2>Categories</h2>
+    <ul>
+      <li class="active" data-filter="all">All</li>
+      <li data-filter="arcade">Arcade</li>
+      <li data-filter="puzzle">Puzzle</li>
+      <li data-filter="classic">Classic</li>
+    </ul>
+  </aside>
+
+  <header class="header">
+    <h1 class="title">Koziky Game's</h1>
+    <p class="subtitle">Play your favorite games unblocked and free!</p>
+  </header>
+
+  <main class="games-container" id="gamesContainer">
+    <!-- Game Cards -->
+    <div class="game-card" data-category="arcade" data-title="Slope" data-description="Race down the slope and avoid obstacles!">
+      <img src="slope.jpg" alt="Slope" class="game-image"/>
+      <div class="game-title">Slope</div>
     </div>
-
-    <div class="content">
-        <header class="header">
-            <h1 class="title">🎮 Unblock Games</h1>
-            <p class="subtitle">Play your favorite games anywhere, anytime! No restrictions, just pure gaming fun.</p>
-        </header>
-
-        <div class="search-container">
-            <input type="text" class="search-box" placeholder="🔍 Search for games..." id="searchBox">
-        </div>
-
-        <main class="games-container" id="gamesContainer">
-            <div class="game-card" data-game="slope" data-title="slope" data-description="race down the slope and avoid obstacles in this thrilling endless runner" data-category="arcade">
-                <span class="game-icon">⛷️</span>
-                <h3 class="game-title">Slope</h3>
-                <p class="game-description">Race down the slope and avoid obstacles in this thrilling endless runner!</p>
-                <button class="play-button" onclick="playGame('slope')">Play Now</button>
-            </div>
-
-            <div class="game-card" data-game="2048" data-title="2048" data-description="combine numbers to reach 2048 in this addictive puzzle game" data-category="puzzle">
-                <span class="game-icon">🧩</span>
-                <h3 class="game-title">2048</h3>
-                <p class="game-description">Combine numbers to reach 2048 in this addictive puzzle game.</p>
-                <button class="play-button" onclick="playGame('2048')">Play Now</button>
-            </div>
-
-            <div class="game-card" data-game="snake" data-title="snake game" data-description="classic snake game eat food grow longer don't hit the walls" data-category="classic">
-                <span class="game-icon">🐍</span>
-                <h3 class="game-title">Snake Game</h3>
-                <p class="game-description">Classic snake game - eat food, grow longer, don't hit the walls!</p>
-                <button class="play-button" onclick="playGame('snake')">Play Now</button>
-            </div>
-
-            <div class="game-card" data-game="tetris" data-title="tetris" data-description="stack falling blocks to clear lines in this timeless classic" data-category="puzzle">
-                <span class="game-icon">🧱</span>
-                <h3 class="game-title">Tetris</h3>
-                <p class="game-description">Stack falling blocks to clear lines in this timeless classic.</p>
-                <button class="play-button" onclick="playGame('tetris')">Play Now</button>
-            </div>
-
-            <div class="game-card" data-game="flappy" data-title="flappy bird" data-description="navigate through pipes in this challenging arcade game" data-category="arcade">
-                <span class="game-icon">🐦</span>
-                <h3 class="game-title">Flappy Bird</h3>
-                <p class="game-description">Navigate through pipes in this challenging arcade game.</p>
-                <button class="play-button" onclick="playGame('flappy')">Play Now</button>
-            </div>
-
-            <div class="game-card" data-game="pacman" data-title="pac-man" data-description="eat dots and avoid ghosts in this iconic arcade classic" data-category="classic">
-                <span class="game-icon">👻</span>
-                <h3 class="game-title">Pac-Man</h3>
-                <p class="game-description">Eat dots and avoid ghosts in this iconic arcade classic.</p>
-                <button class="play-button" onclick="playGame('pacman')">Play Now</button>
-            </div>
-        </main>
-
-        <footer class="footer">
-            <p>✨ Enjoy unlimited gaming fun! All games are free to play. ✨</p>
-        </footer>
+    <div class="game-card" data-category="puzzle" data-title="2048" data-description="Combine tiles to reach 2048!">
+      <img src="2048.jpg" alt="2048" class="game-image"/>
+      <div class="game-title">2048</div>
     </div>
+    <div class="game-card" data-category="classic" data-title="Snake" data-description="Grow the snake without crashing!">
+      <img src="snake.jpg" alt="Snake" class="game-image"/>
+      <div class="game-title">Snake</div>
+    </div>
+    <!-- Add more here -->
+  </main>
 
-    <script>
-        // Game data and functionality
-        const games = [
-            { id: 'slope', title: 'Slope', description: 'Race down the slope and avoid obstacles in this thrilling endless runner!', icon: '⛷️', category: 'arcade' },
-            { id: '2048', title: '2048', description: 'Combine numbers to reach 2048 in this addictive puzzle game.', icon: '🧩', category: 'puzzle' },
-            { id: 'snake', title: 'Snake Game', description: 'Classic snake game - eat food, grow longer, don\'t hit the walls!', icon: '🐍', category: 'classic' },
-            { id: 'tetris', title: 'Tetris', description: 'Stack falling blocks to clear lines in this timeless classic.', icon: '🧱', category: 'puzzle' },
-            { id: 'flappy', title: 'Flappy Bird', description: 'Navigate through pipes in this challenging arcade game.', icon: '🐦', category: 'arcade' },
-            { id: 'pacman', title: 'Pac-Man', description: 'Eat dots and avoid ghosts in this iconic arcade classic.', icon: '👻', category: 'classic' },
-        ];
+  <!-- Game Modal -->
+  <div class="game-modal" id="gameModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">✖</button>
+      <img id="modalImage" class="modal-img" src="" alt="Game Image">
+      <div class="modal-info">
+        <h2 id="modalTitle">Game Title</h2>
+        <p id="modalDesc">Game Description</p>
+        <button class="fullscreen-btn" onclick="alert('🔍 Fullscreen mode loading!')">Fullscreen</button>
+      </div>
+    </div>
+  </div>
 
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
+  <script>
+    const modal = document.getElementById('gameModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalImage = document.getElementById('modalImage');
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.dataset.title;
+        const description = card.dataset.description;
+        const imageSrc = card.querySelector('img').src;
 
-        // Search functionality
-        function setupSearch() {
-            const searchBox = document.getElementById('searchBox');
-            const gameCards = document.querySelectorAll('.game-card');
-            const gamesContainer = document.getElementById('gamesContainer');
+        modalTitle.innerText = title;
+        modalDesc.innerText = description;
+        modalImage.src = imageSrc;
 
-            searchBox.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                let visibleCount = 0;
+        modal.style.display = 'flex';
+      });
+    });
 
-                gameCards.forEach(card => {
-                    const title = card.dataset.title.toLowerCase();
-                    const description = card.dataset.description.toLowerCase();
-                    const category = card.dataset.category.toLowerCase();
+    function closeModal() {
+      modal.style.display = 'none';
+    }
 
-                    if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        card.style.animation = 'cardSlideUp 0.5s ease-out';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+    // Category filter
+    document.querySelectorAll('.sidebar li').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+        item.classList.add('active');
 
-                // Remove existing no results message
-                const existingNoResults = document.querySelector('.no-results');
-                if (existingNoResults) {
-                    existingNoResults.remove();
-                }
-
-                // Show no results message if needed
-                if (visibleCount === 0 && searchTerm.trim() !== '') {
-                    const noResults = document.createElement('div');
-                    noResults.className = 'no-results';
-                    noResults.innerHTML = `No games found matching "${searchTerm}". Try a different search term!`;
-                    gamesContainer.appendChild(noResults);
-                }
-            });
-        }
-
-        // Play game function
-        function playGame(gameName) {
-            // Add click animation to the button
-            const button = event.target;
-            button.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                button.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    button.style.transform = '';
-                }, 150);
-            }, 100);
-
-            // Show game loading message
-            alert(`🎮 Loading ${gameName}... \n\n(In a real implementation, this would launch the game!)`);
-        }
-
-        // Add click effects to cards
-        function addClickEffects() {
-            const cards = document.querySelectorAll('.game-card');
-            
-            cards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (e.target.tagName !== 'BUTTON') {
-                        const button = this.querySelector('.play-button');
-                        button.click();
-                    }
-                });
-            });
-        }
-
-        // Parallax effect for floating shapes
-        function addParallaxEffect() {
-            window.addEventListener('scroll', function() {
-                const shapes = document.querySelectorAll('.shape');
-                shapes.forEach((shape, index) => {
-                    const speed = (index + 1) * 0.5;
-                    const yPos = window.scrollY * speed;
-                    const rotation = window.scrollY * 0.1;
-                    shape.style.transform = `translateY(${yPos}px) rotate(${rotation}deg)`;
-                });
-            });
-        }
-
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            setupSearch();
-            addClickEffects();
-            addParallaxEffect();
-            
-            // Add some extra visual flair
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
+        const filter = item.dataset.filter;
+        document.querySelectorAll('.game-card').forEach(card => {
+          const category = card.dataset.category;
+          card.style.display = (filter === 'all' || filter === category) ? 'block' : 'none';
         });
-
-        // Prevent form submission on search
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.id === 'searchBox') {
-                e.preventDefault();
-            }
-        });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html>
