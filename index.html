@@ -16,6 +16,46 @@
       background: linear-gradient(135deg, #4c1d95, #6b21a8);
       color: white;
       min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #2d1e5f;
+      padding: 2rem 1rem;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      height: 100vh;
+    }
+
+    .sidebar h2 {
+      color: #c084fc;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: #4c1d95;
+      border-radius: 8px;
+      text-align: center;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+
+    .sidebar ul li:hover {
+      background: #6d28d9;
+    }
+
+    .main-content {
+      margin-left: 200px;
+      width: calc(100% - 200px);
     }
 
     header {
@@ -145,16 +185,29 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Koziky Game's</h1>
-  </header>
+  <div class="sidebar">
+    <h2>Categories</h2>
+    <ul>
+      <li>All</li>
+      <li>Arcade</li>
+      <li>Puzzle</li>
+      <li>Classic</li>
+      <li>New</li>
+    </ul>
+  </div>
 
-  <div class="games-container">
-    <div class="game-card" data-game="https://dnrweqffuwjtx.cloudfront.net/games/2025/unity/fast-food-rush/index.html">
-      <img class="game-icon" src="fhn3O3PLDya_qadPxXdpf5gy5fP1nSh2wHZxmQV1PwLWQDIYTWm_aUKDv9YPHEIG6MKrqZJX885m5fJbtkpzBbDoRirYZAqt5mfUON0vHJf_tnpPTlC7Rpq_I2FGZOnQ-kmyKY6dyRs=w1280.png" alt="Fast Food Rusher">
-      <div class="game-title">Fast Food Rusher</div>
-      <div class="game-description">Serve customers and rush orders in this fast-paced food game!</div>
-      <button class="play-button">Play Now</button>
+  <div class="main-content">
+    <header>
+      <h1>Koziky Game's</h1>
+    </header>
+
+    <div class="games-container">
+      <div class="game-card" data-game="https://dnrweqffuwjtx.cloudfront.net/games/2025/unity/fast-food-rush/index.html">
+        <img class="game-icon" src="fhn3O3PLDya_qadPxXdpf5gy5fP1nSh2wHZxmQV1PwLWQDIYTWm_aUKDv9YPHEIG6MKrqZJX885m5fJbtkpzBbDoRirYZAqt5mfUON0vHJf_tnpPTlC7Rpq_I2FGZOnQ-kmyKY6dyRs=w1280.png" alt="Fast Food Rusher">
+        <div class="game-title">Fast Food Rusher</div>
+        <div class="game-description">Serve customers and rush orders in this fast-paced food game!</div>
+        <button class="play-button">Play Now</button>
+      </div>
     </div>
   </div>
 
