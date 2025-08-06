@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Koziky Games</title>
+
+  <!-- Fonts & Particles -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0f0f15;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #161622;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.4);
+    }
+
+    .sidebar h2 {
+      color: #8c58e0;
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .category {
+      background: #26263a;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #ccc;
+      text-align: center;
+      transition: background 0.3s ease, color 0.3s ease;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+    }
+
+    .category:hover,
+    .category.active {
+      background: #8c58e0;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      color: #8c58e0;
+      text-shadow: 0 0 10px rgba(140, 88, 224, 0.5);
+    }
+
+    #searchInput {
+      margin-top: 1rem;
+      padding: 0.7rem;
+      width: 320px;
+      max-width: 90%;
+      border: none;
+      border-radius: 8px;
+      background: #1f1f2f;
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .game-card {
+      background: #1c1c2a;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 12px #8c58e026; /* light purple shadow */
+    }
+
+    .game-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #8c58e0;
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+    }
+
+    .game-card h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .game-card button {
+      background: #8c58e0;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .game-card button:hover {
+      background: #754acc;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        width: 100%;
+        padding: 1rem;
+        justify-content: space-around;
+      }
+
+      .main {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ Particle Background -->
+  <div id="tsparticles"></div>
+
+  <!-- ✅ Sidebar -->
+  <div class="sidebar">
+    <h2>Categories</h2>
+    <div class="category active" onclick="filterCategory('all')">All</div>
+    <div class="category" onclick="filterCategory('shooting')">Shooting</div>
+    <div class="category" onclick="filterCategory('roleplay')">Roleplay</div>
+    <div class="category" onclick="filterCategory('racing')">Racing</div>
+    <div class="category" onclick="filterCategory('arcade')">Arcade</div>
+  </div>
+
+  <!-- ✅ Main -->
+  <div class="main">
+    <header>
+      <h1>Koziky Games</h1>
+      <input type="text" id="searchInput" placeholder="Search games...">
+    </header>
+
+    <div class="game-grid" id="gameContainer">
+      <!-- Sample Game Cards -->
+      <div class="game-card" data-name="Tunnel Rush" data-category="racing">
+        <img src="https://via.placeholder.com/240x140?text=Tunnel+Rush" alt="Tunnel Rush">
+        <h3>Tunnel Rush</h3>
+        <button onclick="launchGame('https://example.com/tunnelrush')">▶ Play</button>
+      </div>
+
+      <div class="game-card" data-name="Pixel Shooter" data-category="shooting">
+        <img src="https://via.placeholder.com/240x140?text=Pixel+Shooter" alt="Pixel Shooter">
+        <h3>Pixel Shooter</h3>
+        <button onclick="launchGame('https://example.com/pixelshooter')">▶ Play</button>
+      </div>
+
+      <div class="game-card" data-name="School RP" data-category="roleplay">
+        <img src="https://via.placeholder.com/240x140?text=School+RP" alt="School RP">
+        <h3>School RP</h3>
+        <button onclick="launchGame('https://example.com/schoolrp')">▶ Play</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Scripts -->
+  <script>
+    function launchGame(url) {
+      window.open(url, '_blank');
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.game-card');
+    const categories = document.querySelectorAll('.category');
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        card.style.display = name.includes(query) ? 'block' : 'none';
+      });
+    });
+
+    function filterCategory(cat) {
+      categories.forEach(c => c.classList.remove('active'));
+      document.querySelector(`.category[onclick*="${cat}"]`).classList.add('active');
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.category === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // ✅ Particles Setup
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      particles: {
+        number: { value: 80 },
+        color: { value: "#8c58e0" },
+        links: {
+          enable: true,
+          color: "#8c58e0",
+          distance: 120,
+          opacity: 0.3
+        },
+        move: {
+          enable: true,
+          speed: 0.6,
+          direction: "none",
+          outMode: "bounce"
+        },
+        size: { value: 2 },
+        opacity: { value: 0.4 }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: false },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
