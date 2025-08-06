@@ -1,131 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Koziky Game's - Fast Food Rusher</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100%;
-      background: linear-gradient(135deg, #4c1d95, #7c3aed);
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-      color: white;
-    }
-    .game-wrapper {
-      display: flex;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Koziky Game's - Play Free Games Online</title>
+<meta name="description" content="Play your favorite unblocked games anywhere, anytime! No restrictions, just pure gaming fun." />
+<style>
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #7c3aed 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: white;
+  }
+  /* Animated Background */
+  .background-animation {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; overflow: hidden;
+  }
+  .floating-shapes {
+    position: absolute;
+    width: 100%; height: 100%;
+  }
+  .shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 0 0 15px 5px rgba(140,88,224,0.3);
+  }
+  .shape:nth-child(1) { width: 60px; height: 60px; top: 20%; left: 10%; animation-delay: 0s; }
+  .shape:nth-child(2) { width: 80px; height: 80px; top: 35%; left: 30%; animation-delay: 2s; }
+  .shape:nth-child(3) { width: 100px; height: 100px; top: 50%; left: 50%; animation-delay: 4s; }
+  .shape:nth-child(4) { width: 120px; height: 120px; top: 65%; left: 70%; animation-delay: 1s; }
+  .shape:nth-child(5) { width: 140px; height: 140px; top: 80%; left: 90%; animation-delay: 3s; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+  }
+  /* Particles */
+  .particles {
+    position: absolute; width: 100%; height: 100%;
+  }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    animation: particle-float 8s linear infinite;
+  }
+  @keyframes particle-float {
+    0% {opacity: 0; transform: translateY(100vh) scale(0);}
+    10% {opacity: 1;}
+    90% {opacity: 1;}
+    100% {opacity: 0; transform: translateY(-100px) scale(1);}
+  }
+
+  /* Layout */
+  .container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  /* Sidebar */
+  aside.sidebar {
+    width: 200px;
+    background: rgba(44, 17, 99, 0.7);
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 0 20px rgba(140, 88, 224, 0.5);
+    flex-shrink: 0;
+    color: #d8cfff;
+  }
+  aside.sidebar h2 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: center;
+    text-shadow: 0 0 5px #bca1ff;
+  }
+  aside.sidebar ul {
+    list-style: none;
+  }
+  aside.sidebar ul li {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.6rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    text-align: center;
+    background: transparent;
+    transition: background-color 0.3s ease;
+  }
+  aside.sidebar ul li:hover,
+  aside.sidebar ul li.active {
+    background: #8c58e0;
+    box-shadow: 0 0 15px #8c58e0;
+    color: white;
+  }
+
+  /* Main Content */
+  main.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header.header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #a855f7, #ec4899, #06b6d4, #10b981);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease infinite;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  }
+  .subtitle {
+    font-size: 1.2rem;
+    color: #c4b5fdcc;
+    margin-top: 0.5rem;
+  }
+
+  /* Search */
+  .search-container {
+    max-width: 350px;
+    margin: 0 auto 2rem auto;
+  }
+  .search-box {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    border-radius: 50px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    color: white;
+    font-size: 1.1rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  .search-box::placeholder {
+    color: rgba(196, 181, 253, 0.6);
+  }
+  .search-box:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(147, 51, 234, 0.5);
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
+  }
+
+  /* Games Grid */
+  .games-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap: 1.5rem;
+  }
+  .game-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(140,88,224,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: white;
+  }
+  .game-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 25px 50px rgba(140,88,224,0.5);
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(147, 51, 234, 0.4);
+  }
+  .game-card img.game-icon {
+    width: 100%;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 5px 15px rgba(140,88,224,0.4);
+  }
+  .game-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .game-description {
+    font-size: 0.9rem;
+    color: rgba(196, 181, 253, 0.85);
+    margin-bottom: 1rem;
+    min-height: 3rem;
+  }
+  .play-button {
+    background: linear-gradient(90deg, #7c3aed, #6366f1);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  .play-button::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  .play-button:hover::after {
+    width: 300px; height: 300px;
+  }
+  .play-button:hover {
+    background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+    box-shadow: 0 10px 20px rgba(140, 88, 224, 0.3);
+    transform: scale(1.05);
+  }
+
+  /* Footer */
+  footer.footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem 1rem;
+    font-size: 1rem;
+    color: rgba(196,181,253,0.6);
+  }
+
+  /* No Results */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.125rem;
+    color: rgba(196, 181, 253, 0.8);
+    padding: 2rem 0;
+  }
+
+  /* Popup */
+  #gamePopup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  #gamePopup > div {
+    background: #1c1c1f;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 0 40px #8c58e0;
+    position: relative;
+    color: white;
+  }
+  #gamePopup button.closeBtn {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: #2e2e35;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    font-size: 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  #gamePopup .popupContent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  #popupGameImage {
+    width: 280px;
+    border-radius: 0.75rem;
+    object-fit: cover;
+  }
+  #popupGameTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  #popupGameFrame {
+    width: 100%;
+    height: 400px;
+    border: none;
+    border-radius: 0.75rem;
+  }
+  #popupGameFrame.fullscreen {
+    height: 100vh;
+    width: 100vw;
+    border-radius: 0;
+  }
+  #popupControls {
+    margin-top: 1rem;
+  }
+  #popupControls button {
+    background: #8c58e0;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 999px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
       flex-direction: column;
-      align-items: center;
+      padding: 1rem;
+    }
+    aside.sidebar {
+      width: 100%;
+      display: flex;
       justify-content: center;
-      height: 100%;
-      padding: 20px;
-      position: relative;
-    }
-    .game-header {
       margin-bottom: 1rem;
-      text-align: center;
     }
-    .game-header h1 {
-      font-size: 2.5rem;
-      background: linear-gradient(45deg, #a855f7, #ec4899, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .game-description {
-      margin: 0.5rem auto 1.5rem auto;
-      max-width: 500px;
-      font-size: 1rem;
-      text-align: center;
-      color: #ddd;
-    }
-    .iframe-container {
-      width: 100%;
-      max-width: 1280px;
-      height: 720px;
-      box-shadow: 0 0 30px #8c58e0;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .controls {
-      margin-top: 1rem;
+    aside.sidebar ul {
       display: flex;
       gap: 1rem;
     }
-    .btn {
-      background: #8c58e0;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+    aside.sidebar ul li {
+      flex: 1;
+      padding: 0.5rem 0;
+      margin-bottom: 0;
+      text-align: center;
     }
-    .btn:hover {
-      background: #a074f7;
-      transform: scale(1.05);
+    .popupContent {
+      flex-direction: column;
     }
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
+    #popupGameImage {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
     }
-    .close-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
+    #popupGameFrame {
+      height: 300px;
     }
-    @media (max-width: 768px) {
-      .iframe-container { height: 60vh; }
-      .game-header h1 { font-size: 2rem; }
-    }
-  </style>
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style>
 </head>
 <body>
-  <div class="game-wrapper">
-    <button class="close-btn" onclick="window.history.back()">X</button>
 
-    <div class="game-header">
-      <h1>🍔 Fast Food Rusher</h1>
-      <p class="game-description">Rush orders, serve fast, and keep customers happy in this fast-paced food game!</p>
-    </div>
-
-    <div class="iframe-container" id="gameBox">
-      <iframe id="gameIframe" allowfullscreen src="https://dnrweqffuwjtx.cloudfront.net/games/2025/unity/fast-food-rush/index.html"></iframe>
-    </div>
-
-    <div class="controls">
-      <button class="btn" onclick="toggleFullscreen()">Fullscreen</button>
-    </div>
+<div class="background-animation">
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
   </div>
+  <div class="particles" id="particles"></div>
+</div>
 
-  <script>
-    function toggleFullscreen() {
-      const iframe = document.getElementById('gameIframe');
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      } else if (iframe.mozRequestFullScreen) {
-        iframe.mozRequestFullScreen();
-      } else if (iframe.webkitRequestFullscreen) {
-        iframe.webkitRequestFullscreen();
-      } else if (iframe.msRequestFullscreen) {
-        iframe.msRequestFullscreen();
-      } else {
-        alert("Fullscreen not supported on this browser.");
-      }
-    }
-  </script>
-</body>
-</html>
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Categories</h2>
+    <ul id="categoryList">
+      <li class="active" data-category="all">All</li>
+      <li data-category="arcade">Arcade</li>
+      <li data-category="puzzle">Puzzle</li>
+      <li data-category="classic">Classic</li>
+    </ul>
+  </aside>
+
+  <!-- Main content -->
+  <main class="content">
+    <header class="header">
+      <h1 class="title">🎮 Koziky Game's</h1>
+      <p class="subtitle">Play your favorite games anywhere, anytime! No restrictions, just pure gaming fun.</p>
+    </header>
+
+    <div class="search-container">
+      <input type="text" class="search-box" placeholder="🔍 Search for games..." id="searchBox" />
+    </div>
+
+    <section class="games-container" id="gamesContainer">
+      <!-- Game cards -->
+      <div class="game-card" data-game="slope" data-title="Slope" data-description="Race down the slope and avoid obstacles in this thrilling endless runner!" data-category="arcade">
+        <img class="game-icon" src="https://i.imgur.com/Q2sW9uB.png" alt="Slope" />
+        <h3 class="game-title">Slope</h3>
+        <p class="game-description">Race down the slope and avoid obstacles in this thrilling endless runner!</p>
+        <button class="play-button" onclick="openGamePopup('Slope', 'https://example.com/slope-game', 'https://i.imgur.com/Q2sW9uB.png')">Play Now</button>
+      </div>
+
+      <div class="game-card" data-game="2048" data-title="2048" data-description="Combine numbers to reach 2048 in this addictive puzzle game." data-category="puzzle">
+        <img class="game-icon" src="https://i.imgur.com/XOfcK8h.png" alt="2048" />
+        <h3 class="game-title">2048</h3>
+        <p class="game-description">Combine numbers to reach 2048 in this addictive puzzle game.</p>
+        <button class="play-button" onclick="openGamePopup('2048', 'https://example.com/2048-game', 'https://i.imgur.com/XOfcK8h.png')">Play Now</button>
+      </div>
+
+      <div class="game-card" data-game="snake" data-title="Snake Game" data-description="Classic snake game - eat food, grow longer, don't hit the walls!" data-category="classic">
+        <img class="game-icon" src="https://i.imgur.com/3POq7cd.png" alt="Snake Game" />
+        <h3 class="game-title">Snake Game</h3>
+        <p class="game-description">Classic snake game - eat food, grow longer, don't hit the walls!</p>
+        <button class="play-button" onclick="openGamePopup('Snake Game', 'https://example.com/snake-game', 'https://i.imgur.com/3POq7cd.png')">Play Now</button>
+      </div>
+
+      <div class="game-card" data-game="tetris" data-title="Tetris" data-description="Stack falling blocks to clear lines in this timeless classic." data-category="puzzle">
+        <img class="game-icon" src="https://i.imgur.com/1iV4mTc.png" alt="Tetris" />
+        <h3 class="game-title">Tetris</h3>
+        <p class="game-description">Stack falling blocks to clear lines in this timeless classic.</p>
+        <button class="play-button" onclick="openGamePopup('Tetris', 'https://example.com/tetris-game', 'https://i.imgur.com/1iV4mTc.png')">Play Now</button>
+      </div>
+
+      <div class="game-card
