@@ -1,185 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>KozyScript Browser</title>
-
-  <!-- React + Babel -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- Tailwind (base utilities) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScriptBlox UI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Inject custom design system -->
-  <style>
-    :root {
-      --background: 215 28% 9%;
-      --foreground: 213 31% 91%;
-      --card: 215 25% 12%;
-      --card-foreground: 213 31% 91%;
-      --primary: 213 94% 68%;
-      --secondary: 25 95% 60%;
-      --muted: 215 25% 16%;
-      --border: 215 25% 20%;
-    }
-
-    body {
-      background: hsl(var(--background));
-      color: hsl(var(--foreground));
-    }
-
-    /* Buttons */
-    .btn-gaming {
-      @apply bg-gradient-to-r from-blue-400 to-orange-400 text-black font-semibold px-4 py-2 rounded-lg transition transform hover:scale-105 shadow;
-    }
-
-    /* Cards */
-    .card-gaming {
-      @apply bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 rounded-xl border border-gray-700 shadow-lg transition hover:shadow-xl p-6;
-    }
-
-    /* Tag pills */
-    .tag {
-      @apply text-xs bg-gray-700 px-2 py-1 rounded;
-    }
-
-    /* Modal */
-    .modal {
-      @apply fixed inset-0 bg-black/80 flex items-center justify-center z-50;
-    }
-    .modal-content {
-      @apply bg-gray-900 p-6 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto;
-    }
-  </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="min-h-screen">
-  <div id="root"></div>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+  <!-- Header -->
+  <header class="bg-gray-900 border-b border-gray-800 p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-blue-400">ScriptBlox UI</h1>
+    <button onclick="showAlert('Welcome!')" class="px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600">
+      Show Alert
+    </button>
+  </header>
 
-    // Mock scripts
-    const mockScripts = [
-      { id: "1", title: "Universal Script Hub", description: "Multi-game hub with ESP and more.", author: "ScriptMaster", game: "Universal", views: 125000, likes: 8500, created: "2024-01-15", isPatched: false, tags: ["Universal", "ESP"], scriptContent: "print('Universal Script Hub Loaded!')" },
-      { id: "2", title: "Arsenal Aimbot & ESP", description: "Smooth aimbot + wallhack.", author: "CombatHacker", game: "Arsenal", views: 89000, likes: 6200, created: "2024-02-01", isPatched: false, tags: ["Arsenal"], scriptContent: "print('Arsenal Script Loaded!')" }
-    ];
+  <!-- Search Bar -->
+  <div class="p-6">
+    <input id="searchInput" type="text" placeholder="Search scripts..."
+      class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+  </div>
 
-    // Header
-    const Header = ({ onSearch }) => {
-      const [query, setQuery] = useState("");
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        onSearch(query);
-      };
-      return (
-        <header className="sticky top-0 z-50 bg-black/70 backdrop-blur border-b border-gray-700">
-          <div className="container mx-auto flex justify-between items-center px-4 py-3">
-            <h1 className="text-2xl font-bold text-gradient-primary">KozyScript</h1>
-            <form onSubmit={handleSubmit} className="flex-1 max-w-md ml-6">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => { setQuery(e.target.value); if (!e.target.value) onSearch(""); }}
-                placeholder="Search scripts..."
-                className="w-full rounded-lg px-3 py-2 bg-gray-800 text-white border border-gray-600"
-              />
-            </form>
-          </div>
-        </header>
-      );
-    };
+  <!-- Accordion -->
+  <div class="px-6">
+    <div class="border border-gray-800 rounded-lg divide-y divide-gray-800">
+      <button onclick="toggleAccordion(this)" class="w-full flex justify-between items-center px-4 py-3 text-left">
+        <span class="font-medium">Accordion Item 1</span>
+        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
+      </button>
+      <div class="hidden px-4 py-3 text-gray-400">This is the content of the first accordion item.</div>
 
-    // Script Card
-    const ScriptCard = ({ script, onView }) => (
-      <div className="card-gaming cursor-pointer" onClick={() => onView(script)}>
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-bold text-lg">{script.title}</h3>
-            <p className="text-sm text-gray-400">{script.game}</p>
-          </div>
-          {script.isPatched && <span className="text-xs bg-red-600 px-2 py-1 rounded">Patched</span>}
-        </div>
-        <p className="text-gray-300 mt-2 line-clamp-3">{script.description}</p>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {script.tags.map((tag, i) => (
-            <span key={i} className="tag">{tag}</span>
-          ))}
-        </div>
-        <div className="flex justify-between items-center text-gray-400 text-sm mt-4">
-          <span>{script.views.toLocaleString()} views</span>
-          <span>{script.author}</span>
-        </div>
-      </div>
-    );
+      <button onclick="toggleAccordion(this)" class="w-full flex justify-between items-center px-4 py-3 text-left">
+        <span class="font-medium">Accordion Item 2</span>
+        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
+      </button>
+      <div class="hidden px-4 py-3 text-gray-400">This is the content of the second accordion item.</div>
+    </div>
+  </div>
 
-    // Script Modal
-    const ScriptModal = ({ script, onClose }) => {
-      if (!script) return null;
-      return (
-        <div className="modal">
-          <div className="modal-content">
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-2xl font-bold">{script.title}</h2>
-              <button onClick={onClose} className="text-gray-400 hover:text-white">✕</button>
-            </div>
-            <p className="text-gray-400 mb-4">{script.description}</p>
-            <pre className="bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto">
-              <code>{script.scriptContent}</code>
-            </pre>
-            <button
-              className="btn-gaming mt-4"
-              onClick={() => navigator.clipboard.writeText(script.scriptContent)}
-            >
-              Copy Script
-            </button>
-          </div>
-        </div>
-      );
-    };
+  <!-- Cards -->
+  <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 1 code here')">
+      <h2 class="text-lg font-semibold">Script 1</h2>
+      <p class="text-gray-400">Description of Script 1</p>
+    </div>
+    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 2 code here')">
+      <h2 class="text-lg font-semibold">Script 2</h2>
+      <p class="text-gray-400">Description of Script 2</p>
+    </div>
+    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 3 code here')">
+      <h2 class="text-lg font-semibold">Script 3</h2>
+      <p class="text-gray-400">Description of Script 3</p>
+    </div>
+  </div>
 
-    // Main Index
-    const Index = () => {
-      const [scripts, setScripts] = useState([]);
-      const [selected, setSelected] = useState(null);
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center">
+    <div class="bg-gray-900 rounded-lg p-6 w-full max-w-lg relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="text-lg font-bold mb-4">Script</h3>
+      <pre id="modalContent" class="bg-gray-800 p-4 rounded text-sm text-gray-200 overflow-x-auto"></pre>
+      <button onclick="copyToClipboard()" class="mt-4 w-full px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600">Copy</button>
+    </div>
+  </div>
 
-      useEffect(() => {
-        setScripts(mockScripts);
-      }, []);
+  <!-- Toast Alert -->
+  <div id="toast" class="fixed bottom-4 right-4 hidden bg-gray-800 text-gray-100 px-4 py-2 rounded-lg shadow-lg"></div>
 
-      const handleSearch = (query) => {
-        if (!query.trim()) {
-          setScripts(mockScripts);
-        } else {
-          setScripts(mockScripts.filter(s =>
-            s.title.toLowerCase().includes(query.toLowerCase()) ||
-            s.description.toLowerCase().includes(query.toLowerCase())
-          ));
-        }
-      };
+  <script>
+    lucide.createIcons();
 
-      return (
-        <div>
-          <Header onSearch={handleSearch} />
-          <main className="container mx-auto px-4 py-8">
-            <h1 className="text-4xl font-bold text-center mb-8">KozyScript Browser</h1>
-            {scripts.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {scripts.map(s => (
-                  <ScriptCard key={s.id} script={s} onView={setSelected} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-gray-400">No scripts found</p>
-            )}
-          </main>
-          <ScriptModal script={selected} onClose={() => setSelected(null)} />
-        </div>
-      );
-    };
+    // Accordion
+    function toggleAccordion(btn) {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector("i");
+      content.classList.toggle("hidden");
+      icon.classList.toggle("rotate-180");
+    }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<Index />);
+    // Search
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".card").forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(query) ? "block" : "none";
+      });
+    });
+
+    // Modal
+    function openModal(content) {
+      document.getElementById("modalContent").innerText = content;
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("modal").classList.add("flex");
+    }
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+      document.getElementById("modal").classList.remove("flex");
+    }
+
+    // Copy
+    function copyToClipboard() {
+      const text = document.getElementById("modalContent").innerText;
+      navigator.clipboard.writeText(text).then(() => showAlert("Copied to clipboard!"));
+    }
+
+    // Alert (Toast)
+    function showAlert(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 2000);
+    }
   </script>
 </body>
 </html>
