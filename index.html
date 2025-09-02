@@ -6,7 +6,7 @@
   <title>KozyScript - Roblox Script Browser</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Smooth animations */
+    /* Glow hover effect for cards */
     .card-gaming {
       transition: all 0.3s ease;
     }
@@ -14,7 +14,8 @@
       transform: translateY(-4px);
       box-shadow: 0 0 25px rgba(100, 149, 237, 0.3);
     }
-    /* Modal backdrop */
+
+    /* Modal transitions */
     .modal {
       transition: opacity 0.3s ease;
     }
@@ -46,14 +47,14 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Card Grid -->
   <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-    <!-- Card Example -->
+    <!-- Example Card -->
     <div class="card-gaming bg-[#1e293b] p-4 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Arsenal')">
       <h2 class="text-lg font-bold">Arsenal</h2>
       <p class="text-sm text-gray-400 mt-2">
-        Advanced script with aimbot, ESP, and wallhacks. Updated for the latest Arsenal version.
+        Advanced script with aimbot, ESP, wallhacks, and weapon mods. Updated for latest Arsenal.
       </p>
       <div class="mt-4 flex gap-2 flex-wrap">
         <span class="px-2 py-1 text-xs rounded bg-gray-700">Aimbot</span>
@@ -65,7 +66,7 @@
     <div class="card-gaming bg-[#1e293b] p-4 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Blox Fruits Auto Farm')">
       <h2 class="text-lg font-bold">Blox Fruits Auto Farm</h2>
       <p class="text-sm text-gray-400 mt-2">
-        Complete farming automation with quest detection, fruit collection, and level farming.
+        Automates farming, quests, and fruit collection. Safe and efficient.
       </p>
       <div class="mt-4 flex gap-2 flex-wrap">
         <span class="px-2 py-1 text-xs rounded bg-gray-700">Auto Farm</span>
@@ -73,13 +74,13 @@
       </div>
     </div>
 
-    <!-- Add more cards as needed -->
+    <!-- More cards can be added here -->
 
   </main>
 
   <!-- Modal -->
   <div id="modal" class="modal fixed inset-0 bg-black/60 flex items-center justify-center hidden">
-    <div class="bg-[#1e293b] p-6 rounded-xl max-w-2xl w-full mx-4 relative">
+    <div class="bg-[#1e293b] p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
       <!-- Close Button -->
       <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200">✕</button>
       <h2 id="modal-title" class="text-xl font-bold mb-2">Script Title</h2>
@@ -94,15 +95,16 @@
     </div>
   </div>
 
+  <!-- Script -->
   <script>
     const scripts = {
       "Arsenal": {
         desc: "Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications.",
-        code: `-- Example placeholder code\nprint("Arsenal Script Loaded!")`
+        code: `-- Example Arsenal code\nprint("Arsenal Script Loaded!")`
       },
       "Blox Fruits Auto Farm": {
         desc: "Complete auto-farming script for Blox Fruits with quest automation and fruit collection.",
-        code: `-- Example placeholder code\nprint("Blox Fruits Script Loaded!")`
+        code: `-- Example Blox Fruits code\nprint("Blox Fruits Script Loaded!")`
       }
     };
 
