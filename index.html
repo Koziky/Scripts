@@ -13,6 +13,25 @@
       transform: translateY(-6px);
       box-shadow: 0 0 20px rgba(100, 149, 237, 0.25);
     }
+    /* Modal Animations */
+    .modal-enter {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    .modal-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .modal-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .modal-exit-active {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
   </style>
 </head>
 <body class="bg-gray-900 text-gray-200 font-sans">
@@ -93,7 +112,7 @@
 
   <!-- Modal -->
   <div id="modal" class="modal fixed inset-0 bg-black/60 flex items-center justify-center hidden">
-    <div class="bg-gray-800 p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
+    <div id="modal-content" class="bg-gray-800 p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
       <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200">✕</button>
       <h2 id="modal-title" class="text-xl font-bold mb-2">Script Title</h2>
       <p id="modal-desc" class="text-sm text-gray-400 mb-4">Script description...</p>
@@ -120,14 +139,36 @@
     };
 
     function openModal(title) {
-      document.getElementById('modal').classList.remove('hidden');
+      const modal = document.getElementById('modal');
+      const content = document.getElementById('modal-content');
+
+      modal.classList.remove('hidden');
+      content.classList.add('modal-enter');
+
+      setTimeout(() => {
+        content.classList.add('modal-enter-active');
+        content.classList.remove('modal-enter');
+      }, 10);
+
       document.getElementById('modal-title').innerText = title;
       document.getElementById('modal-desc').innerText = scripts[title]?.desc || "No description available.";
       document.getElementById('modal-code').innerText = scripts[title]?.code || "-- No code available";
     }
 
     function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
+      const modal = document.getElementById('modal');
+      const content = document.getElementById('modal-content');
+
+      content.classList.add('modal-exit');
+      setTimeout(() => {
+        content.classList.add('modal-exit-active');
+        content.classList.remove('modal-exit');
+      }, 10);
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        content.classList.remove('modal-exit-active');
+      }, 200);
     }
 
     function copyCode() {
