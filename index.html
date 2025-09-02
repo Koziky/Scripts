@@ -1,120 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScriptBlox UI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KozyScript Browser</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
+<body class="bg-slate-900 text-white">
+  <!-- Navbar -->
+  <nav class="bg-slate-800 border-b border-slate-700">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+      <div class="flex items-center space-x-2">
+        <div class="bg-orange-500 text-slate-900 font-bold rounded-lg px-2 py-1">K</div>
+        <div>
+          <h1 class="font-bold text-lg">KozyScript</h1>
+          <p class="text-xs text-slate-400">Roblox Script Browser</p>
+        </div>
+      </div>
+      <div class="flex-1 max-w-lg mx-6">
+        <input type="text" placeholder="Search for Roblox scripts..."
+          class="w-full rounded-lg bg-slate-700 text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+      </div>
+      <button class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600">⟳</button>
+    </div>
+  </nav>
 
-  <!-- Header -->
-  <header class="bg-gray-900 border-b border-gray-800 p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-blue-400">ScriptBlox UI</h1>
-    <button onclick="showAlert('Welcome!')" class="px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600">
-      Show Alert
-    </button>
+  <!-- Hero -->
+  <header class="text-center py-12">
+    <h2 class="text-4xl font-bold text-orange-400">KozyScript Browser</h2>
+    <p class="mt-4 text-slate-300 max-w-2xl mx-auto">
+      Discover and download the best Roblox scripts from ScriptBlox. Find working scripts for your favorite games with our clean, modern interface.
+    </p>
   </header>
 
-  <!-- Search Bar -->
-  <div class="p-6">
-    <input id="searchInput" type="text" placeholder="Search scripts..."
-      class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
-  </div>
-
-  <!-- Accordion -->
-  <div class="px-6">
-    <div class="border border-gray-800 rounded-lg divide-y divide-gray-800">
-      <button onclick="toggleAccordion(this)" class="w-full flex justify-between items-center px-4 py-3 text-left">
-        <span class="font-medium">Accordion Item 1</span>
-        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
-      </button>
-      <div class="hidden px-4 py-3 text-gray-400">This is the content of the first accordion item.</div>
-
-      <button onclick="toggleAccordion(this)" class="w-full flex justify-between items-center px-4 py-3 text-left">
-        <span class="font-medium">Accordion Item 2</span>
-        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
-      </button>
-      <div class="hidden px-4 py-3 text-gray-400">This is the content of the second accordion item.</div>
+  <!-- Script Cards -->
+  <main class="max-w-7xl mx-auto px-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    
+    <!-- Card -->
+    <div class="bg-slate-800 rounded-xl p-5 shadow hover:shadow-lg transition">
+      <h3 class="font-bold text-lg">Universal Script Hub</h3>
+      <p class="text-sm text-slate-400">Universal</p>
+      <p class="mt-2 text-slate-300 text-sm line-clamp-3">
+        A comprehensive script hub with multiple game support including Arsenal, Phantom Forces, and more.
+      </p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Universal</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">GUI</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Auto-Aim</span>
+      </div>
+      <div class="mt-4 flex justify-between text-slate-400 text-xs">
+        <span>👁 125.0K</span>
+        <span>📜 ScriptMaster</span>
+        <span>📅 1/14/2024</span>
+      </div>
     </div>
-  </div>
 
-  <!-- Cards -->
-  <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
-    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 1 code here')">
-      <h2 class="text-lg font-semibold">Script 1</h2>
-      <p class="text-gray-400">Description of Script 1</p>
+    <!-- Card -->
+    <div class="bg-slate-800 rounded-xl p-5 shadow hover:shadow-lg transition">
+      <h3 class="font-bold text-lg">Arsenal Aimbot & ESP</h3>
+      <p class="text-sm text-slate-400">Arsenal</p>
+      <p class="mt-2 text-slate-300 text-sm line-clamp-3">
+        Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications.
+      </p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Arsenal</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Aimbot</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">ESP</span>
+      </div>
+      <div class="mt-4 flex justify-between text-slate-400 text-xs">
+        <span>👁 89.0K</span>
+        <span>📜 CombatHackz</span>
+        <span>📅 1/31/2024</span>
+      </div>
     </div>
-    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 2 code here')">
-      <h2 class="text-lg font-semibold">Script 2</h2>
-      <p class="text-gray-400">Description of Script 2</p>
+
+    <!-- Card -->
+    <div class="bg-slate-800 rounded-xl p-5 shadow hover:shadow-lg transition">
+      <div class="flex justify-between items-start">
+        <h3 class="font-bold text-lg">Blox Fruits Auto Farm</h3>
+        <span class="text-xs bg-red-600 px-2 py-1 rounded-lg">Patched</span>
+      </div>
+      <p class="text-sm text-slate-400">Blox Fruits</p>
+      <p class="mt-2 text-slate-300 text-sm line-clamp-3">
+        Complete auto-farming script for Blox Fruits with quest automation and fruit collection.
+      </p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Blox Fruits</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Auto Farm</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Quests</span>
+      </div>
+      <div class="mt-4 flex justify-between text-slate-400 text-xs">
+        <span>👁 234.0K</span>
+        <span>📜 FarmBot2000</span>
+        <span>📅 1/27/2024</span>
+      </div>
     </div>
-    <div class="card bg-gray-900 p-4 rounded-lg shadow hover:shadow-blue-500/20 cursor-pointer" onclick="openModal('Script 3 code here')">
-      <h2 class="text-lg font-semibold">Script 3</h2>
-      <p class="text-gray-400">Description of Script 3</p>
+
+    <!-- Card -->
+    <div class="bg-slate-800 rounded-xl p-5 shadow hover:shadow-lg transition">
+      <h3 class="font-bold text-lg">Phantom Forces Aimbot</h3>
+      <p class="text-sm text-slate-400">Phantom Forces</p>
+      <p class="mt-2 text-slate-300 text-sm line-clamp-3">
+        Highly accurate aimbot for Phantom Forces with customizable settings, silent aim, and anti-detection.
+      </p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Phantom Forces</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Aimbot</span>
+        <span class="bg-orange-600 text-white px-2 py-1 rounded-lg">Silent Aim</span>
+      </div>
+      <div class="mt-4 flex justify-between text-slate-400 text-xs">
+        <span>👁 67.0K</span>
+        <span>📜 TacticalShooter</span>
+        <span>📅 2/9/2024</span>
+      </div>
     </div>
-  </div>
 
-  <!-- Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center">
-    <div class="bg-gray-900 rounded-lg p-6 w-full max-w-lg relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="text-lg font-bold mb-4">Script</h3>
-      <pre id="modalContent" class="bg-gray-800 p-4 rounded text-sm text-gray-200 overflow-x-auto"></pre>
-      <button onclick="copyToClipboard()" class="mt-4 w-full px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600">Copy</button>
-    </div>
-  </div>
-
-  <!-- Toast Alert -->
-  <div id="toast" class="fixed bottom-4 right-4 hidden bg-gray-800 text-gray-100 px-4 py-2 rounded-lg shadow-lg"></div>
-
-  <script>
-    lucide.createIcons();
-
-    // Accordion
-    function toggleAccordion(btn) {
-      const content = btn.nextElementSibling;
-      const icon = btn.querySelector("i");
-      content.classList.toggle("hidden");
-      icon.classList.toggle("rotate-180");
-    }
-
-    // Search
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      document.querySelectorAll(".card").forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(query) ? "block" : "none";
-      });
-    });
-
-    // Modal
-    function openModal(content) {
-      document.getElementById("modalContent").innerText = content;
-      document.getElementById("modal").classList.remove("hidden");
-      document.getElementById("modal").classList.add("flex");
-    }
-    function closeModal() {
-      document.getElementById("modal").classList.add("hidden");
-      document.getElementById("modal").classList.remove("flex");
-    }
-
-    // Copy
-    function copyToClipboard() {
-      const text = document.getElementById("modalContent").innerText;
-      navigator.clipboard.writeText(text).then(() => showAlert("Copied to clipboard!"));
-    }
-
-    // Alert (Toast)
-    function showAlert(msg) {
-      const toast = document.getElementById("toast");
-      toast.innerText = msg;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 2000);
-    }
-  </script>
+  </main>
 </body>
 </html>
