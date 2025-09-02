@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ScriptBlox Dashboard</title>
+  <title>Roblox-Inspired Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* === Roblox-Inspired Dark Theme === */
+    /* === Roblox-Inspired Dark Theme Variables === */
     :root {
       --background: 215 28% 9%;
       --foreground: 213 31% 91%;
@@ -23,9 +23,6 @@
       font-family: ui-sans-serif, system-ui, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
     /* Navbar */
@@ -36,9 +33,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 50;
     }
     nav input {
       background: hsl(var(--background));
@@ -46,7 +40,6 @@
       border-radius: var(--radius);
       padding: 0.5rem 1rem;
       width: 250px;
-      max-width: 60vw;
       transition: border 0.3s ease, box-shadow 0.3s ease;
     }
     nav input:focus {
@@ -55,14 +48,13 @@
       box-shadow: 0 0 8px hsl(var(--primary) / 0.5);
     }
 
-    /* Cards */
+    /* Gaming Card */
     .card-gaming {
       background: hsl(var(--card));
       border: 1px solid hsl(var(--border));
       border-radius: var(--radius);
       padding: 1.5rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-align: center;
     }
     .card-gaming:hover {
       transform: translateY(-5px);
@@ -70,7 +62,7 @@
       border-color: hsl(var(--primary));
     }
 
-    /* Buttons */
+    /* Gaming Button */
     .btn-gaming {
       background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
       color: hsl(var(--background));
@@ -78,7 +70,6 @@
       border-radius: var(--radius);
       font-weight: 600;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: inline-block;
     }
     .btn-gaming:hover {
       transform: scale(1.05);
@@ -87,22 +78,18 @@
 
     /* Root container */
     #root {
-      flex: 1;
       max-width: 1200px;
-      width: 100%;
       margin: 0 auto;
       padding: 2rem 1rem;
-      box-sizing: border-box;
     }
 
-    /* Hero */
+    /* Hero Section */
     .hero {
       text-align: center;
       margin-bottom: 3rem;
-      padding: 0 1rem;
     }
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: 2.5rem;
       font-weight: 700;
       background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
       -webkit-background-clip: text;
@@ -111,12 +98,11 @@
     .hero p {
       color: #9ca3af;
       margin-top: 0.75rem;
-      font-size: 1rem;
     }
 
     /* Logo */
     .logo {
-      height: 2.2em;
+      height: 2.5em;
       transition: filter 0.3s;
     }
     .logo:hover {
@@ -130,18 +116,11 @@
       animation: logo-spin infinite 20s linear;
     }
 
-    /* Grid */
+    /* Responsive Grid */
     .grid-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
-    }
-
-    .card-description {
-      font-size: 0.95rem;
-      color: #9ca3af;
-      margin-bottom: 1.25rem;
-      line-height: 1.4;
     }
   </style>
 </head>
@@ -160,33 +139,27 @@
     <!-- Hero -->
     <section class="hero">
       <h1>Discover Roblox Scripts</h1>
-      <p>Your hub for safe, optimized & community-tested Roblox content.</p>
+      <p>Your hub for safe & tested Roblox scripts.</p>
     </section>
 
-    <!-- Cards -->
+    <!-- Cards Grid -->
     <section class="grid-cards">
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Scripts</h2>
-        <p class="card-description">Browse thousands of safe, regularly updated Roblox scripts for your favorite games.</p>
-        <a href="#" class="btn-gaming">Explore</a>
+        <p class="mb-4">Find Roblox scripts easily.</p>
+        <button class="btn-gaming">Explore</button>
       </div>
       
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Executors</h2>
-        <p class="card-description">Find the best-performing script executors with secure injection and smooth performance.</p>
-        <a href="#" class="btn-gaming">View</a>
+        <p class="mb-4">Browse Roblox executors.</p>
+        <button class="btn-gaming">View</button>
       </div>
       
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Community</h2>
-        <p class="card-description">Connect with fellow Roblox scripters, share resources, and learn from others.</p>
-        <a href="#" class="btn-gaming">Join</a>
-      </div>
-      
-      <div class="card-gaming">
-        <h2 class="text-xl font-semibold mb-2">Updates</h2>
-        <p class="card-description">Stay up to date with the latest news, patches, and features in the Roblox scripting world.</p>
-        <a href="#" class="btn-gaming">Check</a>
+        <p class="mb-4">Join Roblox scripters & gamers.</p>
+        <button class="btn-gaming">Join</button>
       </div>
     </section>
   </div>
