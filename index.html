@@ -25,29 +25,6 @@
       padding: 0;
     }
 
-    /* Navbar */
-    nav {
-      background: hsl(var(--card));
-      border-bottom: 1px solid hsl(var(--border));
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    nav input {
-      background: hsl(var(--background));
-      border: 1px solid hsl(var(--border));
-      border-radius: var(--radius);
-      padding: 0.5rem 1rem;
-      width: 250px;
-      transition: border 0.3s ease, box-shadow 0.3s ease;
-    }
-    nav input:focus {
-      outline: none;
-      border-color: hsl(var(--primary));
-      box-shadow: 0 0 8px hsl(var(--primary) / 0.5);
-    }
-
     /* Gaming Card */
     .card-gaming {
       background: hsl(var(--card));
@@ -66,7 +43,7 @@
     .btn-gaming {
       background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
       color: hsl(var(--background));
-      padding: 0.6rem 1.25rem;
+      padding: 0.75rem 1.25rem;
       border-radius: var(--radius);
       font-weight: 600;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -76,33 +53,16 @@
       box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
     }
 
-    /* Root container */
+    /* Root container fix */
     #root {
       max-width: 1200px;
       margin: 0 auto;
       padding: 2rem 1rem;
     }
 
-    /* Hero Section */
-    .hero {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      color: #9ca3af;
-      margin-top: 0.75rem;
-    }
-
-    /* Logo */
+    /* Logo Animation */
     .logo {
-      height: 2.5em;
+      height: 4em;
       transition: filter 0.3s;
     }
     .logo:hover {
@@ -125,22 +85,11 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav>
-    <div class="flex items-center gap-2">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Roblox_Logo_2022.svg" class="logo spin" alt="Logo">
-      <span class="font-bold text-lg">ScriptBlox UI</span>
-    </div>
-    <input type="text" placeholder="Search scripts...">
-  </nav>
-
-  <!-- Main Content -->
   <div id="root">
-    <!-- Hero -->
-    <section class="hero">
-      <h1>Discover Roblox Scripts</h1>
-      <p>Your hub for safe & tested Roblox scripts.</p>
-    </section>
+    <header class="mb-8 text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Roblox_Logo_2022.svg" class="logo spin mx-auto mb-4" alt="Logo">
+      <h1 class="text-3xl font-bold">Roblox-Inspired Dashboard</h1>
+    </header>
 
     <!-- Cards Grid -->
     <section class="grid-cards">
