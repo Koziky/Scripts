@@ -3,34 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KozyScript - Roblox Script Browser</title>
+  <title>KozyScript Browser</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Glow hover effect for cards */
-    .card-gaming {
+    .card-box {
       transition: all 0.3s ease;
     }
-    .card-gaming:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 25px rgba(100, 149, 237, 0.3);
-    }
-
-    /* Modal transitions */
-    .modal {
-      transition: opacity 0.3s ease;
-    }
-    .modal.hidden {
-      opacity: 0;
-      pointer-events: none;
+    .card-box:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 20px rgba(100, 149, 237, 0.25);
     }
   </style>
 </head>
-<body class="bg-[#0f172a] text-gray-200 font-sans">
+<body class="bg-gray-900 text-gray-200 font-sans">
 
   <!-- Header -->
-  <header class="w-full bg-[#1e293b] border-b border-gray-700 shadow-md">
+  <header class="w-full bg-gray-800 border-b border-gray-700 shadow-md">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-center items-center p-4 gap-4">
-      <!-- Logo + Title -->
       <div class="flex items-center gap-2">
         <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-black font-bold shadow-md">
           K
@@ -39,49 +28,72 @@
           KozyScript
         </h1>
       </div>
-      <!-- Search -->
       <div class="flex-1 max-w-lg w-full">
         <input type="text" placeholder="Search for Roblox scripts..."
-          class="w-full p-2 rounded-lg bg-gray-800 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-blue-400 outline-none transition"/>
+          class="w-full p-2 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-blue-400 outline-none transition"/>
       </div>
     </div>
   </header>
 
   <!-- Card Grid -->
-  <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
     <!-- Example Card -->
-    <div class="card-gaming bg-[#1e293b] p-4 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Arsenal')">
-      <h2 class="text-lg font-bold">Arsenal</h2>
-      <p class="text-sm text-gray-400 mt-2">
-        Advanced script with aimbot, ESP, wallhacks, and weapon mods. Updated for latest Arsenal.
+    <div class="card-box bg-gray-800 p-5 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Blox Fruits Auto Farm')">
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="text-lg font-bold">Blox Fruits Auto Farm</h2>
+          <p class="text-sm text-gray-400">Blox Fruits</p>
+        </div>
+        <span class="bg-red-600 text-xs px-2 py-1 rounded-full font-semibold">Patched</span>
+      </div>
+      <p class="text-sm text-gray-300 mt-3">
+        Complete auto-farming script for Blox Fruits with level detection, quest automation, and fruit collection.
       </p>
-      <div class="mt-4 flex gap-2 flex-wrap">
-        <span class="px-2 py-1 text-xs rounded bg-gray-700">Aimbot</span>
-        <span class="px-2 py-1 text-xs rounded bg-gray-700">ESP</span>
-        <span class="px-2 py-1 text-xs rounded bg-gray-700">Wallhack</span>
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Blox Fruits</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Auto Farm</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Quests</span>
+        <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">+1 more</span>
+      </div>
+      <!-- Stats -->
+      <div class="flex justify-between items-center text-xs text-gray-400 border-t border-gray-700 mt-4 pt-3">
+        <span>👁 234.0K</span>
+        <span>👤 FarmBot2024</span>
+        <span>📅 Jan 27, 2024</span>
       </div>
     </div>
 
-    <div class="card-gaming bg-[#1e293b] p-4 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Blox Fruits Auto Farm')">
-      <h2 class="text-lg font-bold">Blox Fruits Auto Farm</h2>
-      <p class="text-sm text-gray-400 mt-2">
-        Automates farming, quests, and fruit collection. Safe and efficient.
+    <!-- Another Example -->
+    <div class="card-box bg-gray-800 p-5 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Arsenal')">
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="text-lg font-bold">Arsenal</h2>
+          <p class="text-sm text-gray-400">Roblox Arsenal</p>
+        </div>
+        <span class="bg-green-600 text-xs px-2 py-1 rounded-full font-semibold">Updated</span>
+      </div>
+      <p class="text-sm text-gray-300 mt-3">
+        Aimbot, ESP, wallhacks, and weapon modifications. Updated for the latest Arsenal patch.
       </p>
-      <div class="mt-4 flex gap-2 flex-wrap">
-        <span class="px-2 py-1 text-xs rounded bg-gray-700">Auto Farm</span>
-        <span class="px-2 py-1 text-xs rounded bg-gray-700">Quests</span>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Arsenal</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">ESP</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Aimbot</span>
+      </div>
+      <div class="flex justify-between items-center text-xs text-gray-400 border-t border-gray-700 mt-4 pt-3">
+        <span>👁 89.0K</span>
+        <span>👤 CombatHacker</span>
+        <span>📅 Jan 31, 2024</span>
       </div>
     </div>
-
-    <!-- More cards can be added here -->
 
   </main>
 
   <!-- Modal -->
   <div id="modal" class="modal fixed inset-0 bg-black/60 flex items-center justify-center hidden">
-    <div class="bg-[#1e293b] p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
-      <!-- Close Button -->
+    <div class="bg-gray-800 p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
       <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200">✕</button>
       <h2 id="modal-title" class="text-xl font-bold mb-2">Script Title</h2>
       <p id="modal-desc" class="text-sm text-gray-400 mb-4">Script description...</p>
@@ -95,16 +107,15 @@
     </div>
   </div>
 
-  <!-- Script -->
   <script>
     const scripts = {
-      "Arsenal": {
-        desc: "Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications.",
-        code: `-- Example Arsenal code\nprint("Arsenal Script Loaded!")`
-      },
       "Blox Fruits Auto Farm": {
         desc: "Complete auto-farming script for Blox Fruits with quest automation and fruit collection.",
         code: `-- Example Blox Fruits code\nprint("Blox Fruits Script Loaded!")`
+      },
+      "Arsenal": {
+        desc: "Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications.",
+        code: `-- Example Arsenal code\nprint("Arsenal Script Loaded!")`
       }
     };
 
