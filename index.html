@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KozyScript Browser</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     .card-box {
       transition: all 0.3s ease;
@@ -13,114 +14,89 @@
       transform: translateY(-6px);
       box-shadow: 0 0 20px rgba(100, 149, 237, 0.25);
     }
-    /* Modal Animations */
+    /* Modal Animation */
     .modal-enter {
       opacity: 0;
-      transform: scale(0.9);
+      transform: translateY(20px) scale(0.95);
     }
     .modal-enter-active {
       opacity: 1;
-      transform: scale(1);
+      transform: translateY(0) scale(1);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .modal-exit {
       opacity: 1;
-      transform: scale(1);
+      transform: translateY(0) scale(1);
     }
     .modal-exit-active {
       opacity: 0;
-      transform: scale(0.9);
+      transform: translateY(20px) scale(0.95);
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
   </style>
 </head>
 <body class="bg-gray-900 text-gray-200 font-sans">
 
-  <!-- Header -->
-  <header class="w-full bg-gray-800 border-b border-gray-700 shadow-md">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-center items-center p-4 gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-black font-bold shadow-md">
-          K
-        </div>
-        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent">
-          KozyScript
-        </h1>
-      </div>
-      <div class="flex-1 max-w-lg w-full">
-        <input type="text" placeholder="Search for Roblox scripts..."
-          class="w-full p-2 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-blue-400 outline-none transition"/>
-      </div>
-    </div>
-  </header>
-
   <!-- Card Grid -->
   <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
     <!-- Example Card -->
-    <div class="card-box bg-gray-800 p-5 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Blox Fruits Auto Farm')">
-      <div class="flex justify-between items-start">
-        <div>
-          <h2 class="text-lg font-bold">Blox Fruits Auto Farm</h2>
-          <p class="text-sm text-gray-400">Blox Fruits</p>
-        </div>
-        <span class="bg-red-600 text-xs px-2 py-1 rounded-full font-semibold">Patched</span>
-      </div>
+    <div class="card-box bg-gray-800 p-5 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Pet Simulator X Duplication')">
+      <h2 class="text-lg font-bold">Pet Simulator X Duplication</h2>
+      <p class="text-sm text-gray-400">Pet Simulator X</p>
       <p class="text-sm text-gray-300 mt-3">
-        Complete auto-farming script for Blox Fruits with level detection, quest automation, and fruit collection.
+        Working pet and gem duplication script for Pet Simulator X. Includes auto-hatch, mailbox stealer, and more.
       </p>
       <!-- Tags -->
       <div class="flex flex-wrap gap-2 mt-3">
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Blox Fruits</span>
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Auto Farm</span>
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Quests</span>
-        <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">+1 more</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Pet Sim X</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Duplication</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Auto Hatch</span>
+        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Gems</span>
       </div>
       <!-- Stats -->
       <div class="flex justify-between items-center text-xs text-gray-400 border-t border-gray-700 mt-4 pt-3">
-        <span>👁 234.0K</span>
-        <span>👤 FarmBot2024</span>
-        <span>📅 Jan 27, 2024</span>
-      </div>
-    </div>
-
-    <!-- Another Example -->
-    <div class="card-box bg-gray-800 p-5 rounded-xl border border-gray-700 cursor-pointer" onclick="openModal('Arsenal')">
-      <div class="flex justify-between items-start">
-        <div>
-          <h2 class="text-lg font-bold">Arsenal</h2>
-          <p class="text-sm text-gray-400">Roblox Arsenal</p>
-        </div>
-        <span class="bg-green-600 text-xs px-2 py-1 rounded-full font-semibold">Updated</span>
-      </div>
-      <p class="text-sm text-gray-300 mt-3">
-        Aimbot, ESP, wallhacks, and weapon modifications. Updated for the latest Arsenal patch.
-      </p>
-      <div class="flex flex-wrap gap-2 mt-3">
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Arsenal</span>
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">ESP</span>
-        <span class="bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold">Aimbot</span>
-      </div>
-      <div class="flex justify-between items-center text-xs text-gray-400 border-t border-gray-700 mt-4 pt-3">
-        <span>👁 89.0K</span>
-        <span>👤 CombatHacker</span>
-        <span>📅 Jan 31, 2024</span>
+        <span>👁 198.0K</span>
+        <span>👍 12.3K</span>
+        <span>📅 Jan 19, 2024</span>
       </div>
     </div>
 
   </main>
 
   <!-- Modal -->
-  <div id="modal" class="modal fixed inset-0 bg-black/60 flex items-center justify-center hidden">
-    <div id="modal-content" class="bg-gray-800 p-6 rounded-xl max-w-2xl w-full mx-4 relative shadow-lg">
-      <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200">✕</button>
-      <h2 id="modal-title" class="text-xl font-bold mb-2">Script Title</h2>
-      <p id="modal-desc" class="text-sm text-gray-400 mb-4">Script description...</p>
-      <div>
-        <h3 class="font-semibold mb-2">Script Code</h3>
-        <pre class="bg-gray-900 p-4 rounded-lg text-sm text-gray-300 overflow-x-auto"><code id="modal-code">-- Placeholder code</code></pre>
-        <button onclick="copyCode()" class="mt-4 px-4 py-2 bg-gradient-to-r from-blue-400 to-orange-400 text-black font-semibold rounded-lg hover:scale-105 transition">
-          Copy Script
+  <div id="modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden">
+    <div id="modal-content" class="bg-gray-800 p-6 rounded-xl max-w-3xl w-full mx-4 relative shadow-lg">
+      <!-- Close -->
+      <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200 bg-gray-700 rounded-lg p-1">
+        <i data-lucide="x"></i>
+      </button>
+      <!-- Header -->
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 id="modal-title" class="text-2xl font-bold text-blue-400">Script Title</h2>
+          <p id="modal-game" class="text-sm text-gray-400">Game Name</p>
+        </div>
+        <span id="modal-status" class="bg-red-600 text-xs px-2 py-1 rounded-full font-semibold">Patched</span>
+      </div>
+      <!-- Meta -->
+      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400 mt-3">
+        <span class="flex items-center gap-1"><i data-lucide="user"></i> <span id="modal-author">Author</span></span>
+        <span class="flex items-center gap-1"><i data-lucide="eye"></i> <span id="modal-views">0 views</span></span>
+        <span class="flex items-center gap-1"><i data-lucide="heart"></i> <span id="modal-likes">0 likes</span></span>
+        <span class="flex items-center gap-1"><i data-lucide="calendar"></i> <span id="modal-date">Date</span></span>
+      </div>
+      <!-- Tags -->
+      <div id="modal-tags" class="flex flex-wrap gap-2 mt-3"></div>
+      <!-- Description -->
+      <h3 class="font-semibold mt-6 mb-2">Description</h3>
+      <p id="modal-desc" class="text-sm text-gray-300">Description text...</p>
+      <!-- Script -->
+      <h3 class="font-semibold mt-6 mb-2">Script Code</h3>
+      <div class="relative">
+        <pre class="bg-gray-900 p-4 rounded-lg text-sm text-gray-300 overflow-x-auto"><code id="modal-code">-- Code here</code></pre>
+        <button onclick="copyCode()" class="absolute top-2 right-2 flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-blue-400 to-orange-400 text-black font-semibold rounded-lg text-sm">
+          <i data-lucide="copy"></i> Copy Script
         </button>
       </div>
     </div>
@@ -128,31 +104,53 @@
 
   <script>
     const scripts = {
-      "Blox Fruits Auto Farm": {
-        desc: "Complete auto-farming script for Blox Fruits with quest automation and fruit collection.",
-        code: `-- Example Blox Fruits code\nprint("Blox Fruits Script Loaded!")`
-      },
-      "Arsenal": {
-        desc: "Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications.",
-        code: `-- Example Arsenal code\nprint("Arsenal Script Loaded!")`
+      "Pet Simulator X Duplication": {
+        game: "Pet Simulator X",
+        author: "PetMaster99",
+        views: "198.0K views",
+        likes: "12.3K likes",
+        date: "Jan 19, 2024",
+        status: "Patched",
+        tags: ["Pet Sim X", "Duplication", "Auto Hatch", "Gems"],
+        desc: "Working pet and gem duplication script for Pet Simulator X. Includes auto-hatch, mailbox stealer, and more advanced features.",
+        code: `-- Pet Simulator X Script\n-- WARNING: Duplication methods patched!\n\nlocal Players = game:GetService("Players")\nlocal ReplicatedStorage = game:GetService("ReplicatedStorage")\nlocal localPlayer = Players.LocalPlayer\n\nprint("Pet Simulator X Script - Some features may be patched")`
       }
     };
 
     function openModal(title) {
+      const data = scripts[title];
       const modal = document.getElementById('modal');
       const content = document.getElementById('modal-content');
 
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-game').innerText = data.game;
+      document.getElementById('modal-author').innerText = data.author;
+      document.getElementById('modal-views').innerText = data.views;
+      document.getElementById('modal-likes').innerText = data.likes;
+      document.getElementById('modal-date').innerText = data.date;
+      document.getElementById('modal-status').innerText = data.status;
+      document.getElementById('modal-desc').innerText = data.desc;
+      document.getElementById('modal-code').innerText = data.code;
+
+      // tags
+      const tagsContainer = document.getElementById('modal-tags');
+      tagsContainer.innerHTML = "";
+      data.tags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = "bg-orange-500/90 text-black text-xs px-2 py-1 rounded-full font-semibold";
+        span.innerText = tag;
+        tagsContainer.appendChild(span);
+      });
+
+      // show modal with animation
       modal.classList.remove('hidden');
       content.classList.add('modal-enter');
-
       setTimeout(() => {
         content.classList.add('modal-enter-active');
         content.classList.remove('modal-enter');
       }, 10);
 
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-desc').innerText = scripts[title]?.desc || "No description available.";
-      document.getElementById('modal-code').innerText = scripts[title]?.code || "-- No code available";
+      lucide.createIcons();
     }
 
     function closeModal() {
@@ -178,6 +176,5 @@
       });
     }
   </script>
-
 </body>
 </html>
