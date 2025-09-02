@@ -3,48 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <title>KozyScript Browser</title>
+
+  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    body { font-family: sans-serif; background: #111; color: #eee; margin: 0; }
-    .card { background: #222; border-radius: 12px; padding: 16px; margin: 8px; cursor: pointer; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  </style>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen text-white">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // Mock Data
+    // Mock scripts
     const mockScripts = [
-      { id: "1", title: "Universal Script Hub", description: "Multi-game support...", author: "ScriptMaster", views: 125000, likes: 8500, created: "2024-01-15", isPatched: false, tags: ["Universal", "ESP"], scriptContent: "print('Universal Script Hub Loaded!')" },
-      { id: "2", title: "Arsenal Aimbot", description: "Smooth aimbot and ESP.", author: "CombatHacker", views: 89000, likes: 6200, created: "2024-02-01", isPatched: false, tags: ["Arsenal"], scriptContent: "print('Arsenal Script Loaded!')" }
+      { id: "1", title: "Universal Script Hub", description: "Multi-game hub with ESP and more.", author: "ScriptMaster", game: "Universal", views: 125000, likes: 8500, created: "2024-01-15", isPatched: false, tags: ["Universal", "ESP"], scriptContent: "print('Universal Script Hub Loaded!')" },
+      { id: "2", title: "Arsenal Aimbot & ESP", description: "Smooth aimbot + wallhack.", author: "CombatHacker", game: "Arsenal", views: 89000, likes: 6200, created: "2024-02-01", isPatched: false, tags: ["Arsenal"], scriptContent: "print('Arsenal Script Loaded!')" }
     ];
 
+    // Header
+    const Header = ({ onSearch }) => {
+      const [query, setQuery] = useState("");
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        onSearch(query);
+      };
+      return (
+        <header className="sticky top-0 z-50 bg-black/70 backdrop-blur border-b border-gray-700">
+          <div className="container mx-auto flex justify-between items-center px-4 py-3">
+            <h1 className="text-2xl font-bold text-pink-500">KozyScript</h1>
+            <form onSubmit={handleSubmit} className="flex-1 max-w-md ml-6">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); if (!e.target.value) onSearch(""); }}
+                placeholder="Search scripts..."
+                className="w-full rounded-lg px-3 py-2 bg-gray-800 text-white border border-gray-600"
+              />
+            </form>
+          </div>
+        </header>
+      );
+    };
+
+    // Script Card
     const ScriptCard = ({ script, onView }) => (
-      <div className="card" onClick={() => onView(script)}>
-        <h3>{script.title}</h3>
-        <p>{script.description}</p>
-        <small>{script.author} • {script.views} views</small>
+      <div
+        className="bg-gray-800 rounded-2xl p-6 shadow hover:shadow-lg transition cursor-pointer"
+        onClick={() => onView(script)}
+      >
+        <div className="flex justify-between items-start">
+          <div>
+            <h3 className="font-bold text-lg">{script.title}</h3>
+            <p className="text-sm text-gray-400">{script.game}</p>
+          </div>
+          {script.isPatched && <span className="text-xs bg-red-600 px-2 py-1 rounded">Patched</span>}
+        </div>
+        <p className="text-gray-300 mt-2 line-clamp-3">{script.description}</p>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {script.tags.map((tag, i) => (
+            <span key={i} className="text-xs bg-gray-700 px-2 py-1 rounded">{tag}</span>
+          ))}
+        </div>
+        <div className="flex justify-between items-center text-gray-400 text-sm mt-4">
+          <span>{script.views.toLocaleString()} views</span>
+          <span>{script.author}</span>
+        </div>
       </div>
     );
 
+    // Script Modal
     const ScriptModal = ({ script, onClose }) => {
       if (!script) return null;
       return (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ background: "#222", padding: 20, borderRadius: 12, maxWidth: "600px", width: "90%" }}>
-            <h2>{script.title}</h2>
-            <pre style={{ whiteSpace: "pre-wrap" }}>{script.scriptContent}</pre>
-            <button onClick={onClose}>Close</button>
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="bg-gray-900 p-6 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-2xl font-bold">{script.title}</h2>
+              <button onClick={onClose} className="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <p className="text-gray-400 mb-4">{script.description}</p>
+            <pre className="bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto">
+              <code>{script.scriptContent}</code>
+            </pre>
           </div>
         </div>
       );
     };
 
+    // Main Index
     const Index = () => {
       const [scripts, setScripts] = useState([]);
       const [selected, setSelected] = useState(null);
@@ -53,14 +103,32 @@
         setScripts(mockScripts);
       }, []);
 
+      const handleSearch = (query) => {
+        if (!query.trim()) {
+          setScripts(mockScripts);
+        } else {
+          setScripts(mockScripts.filter(s =>
+            s.title.toLowerCase().includes(query.toLowerCase()) ||
+            s.description.toLowerCase().includes(query.toLowerCase())
+          ));
+        }
+      };
+
       return (
         <div>
-          <h1>KozyScript Browser</h1>
-          <div className="grid">
-            {scripts.map(s => (
-              <ScriptCard key={s.id} script={s} onView={setSelected} />
-            ))}
-          </div>
+          <Header onSearch={handleSearch} />
+          <main className="container mx-auto px-4 py-8">
+            <h1 className="text-4xl font-bold text-center mb-8">KozyScript Browser</h1>
+            {scripts.length > 0 ? (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {scripts.map(s => (
+                  <ScriptCard key={s.id} script={s} onView={setSelected} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-400">No scripts found</p>
+            )}
+          </main>
           <ScriptModal script={selected} onClose={() => setSelected(null)} />
         </div>
       );
