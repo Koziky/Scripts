@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Roblox-Inspired Dashboard</title>
+  <title>ScriptBlox Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* === Roblox-Inspired Dark Theme === */
@@ -85,7 +85,7 @@
       box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
     }
 
-    /* Root container (fixed center issue) */
+    /* Root container */
     #root {
       flex: 1;
       max-width: 1200px;
@@ -136,6 +136,13 @@
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.5rem;
     }
+
+    .card-description {
+      font-size: 0.95rem;
+      color: #9ca3af;
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
@@ -153,27 +160,33 @@
     <!-- Hero -->
     <section class="hero">
       <h1>Discover Roblox Scripts</h1>
-      <p>Your hub for safe & tested Roblox scripts.</p>
+      <p>Your hub for safe, optimized & community-tested Roblox content.</p>
     </section>
 
     <!-- Cards -->
     <section class="grid-cards">
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Scripts</h2>
-        <p class="mb-4">Find Roblox scripts easily.</p>
+        <p class="card-description">Browse thousands of safe, regularly updated Roblox scripts for your favorite games.</p>
         <a href="#" class="btn-gaming">Explore</a>
       </div>
       
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Executors</h2>
-        <p class="mb-4">Browse Roblox executors.</p>
+        <p class="card-description">Find the best-performing script executors with secure injection and smooth performance.</p>
         <a href="#" class="btn-gaming">View</a>
       </div>
       
       <div class="card-gaming">
         <h2 class="text-xl font-semibold mb-2">Community</h2>
-        <p class="mb-4">Join Roblox scripters & gamers.</p>
+        <p class="card-description">Connect with fellow Roblox scripters, share resources, and learn from others.</p>
         <a href="#" class="btn-gaming">Join</a>
+      </div>
+      
+      <div class="card-gaming">
+        <h2 class="text-xl font-semibold mb-2">Updates</h2>
+        <p class="card-description">Stay up to date with the latest news, patches, and features in the Roblox scripting world.</p>
+        <a href="#" class="btn-gaming">Check</a>
       </div>
     </section>
   </div>
