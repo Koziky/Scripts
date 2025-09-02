@@ -1,181 +1,187 @@
-using System.Text.Json;
-using System.Net.Http.Json;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-
-public async Task FetchScripts()
-{
-    HttpClient client = new HttpClient();
-    try
-    {
-        JsonElement scripts = await client.GetFromJsonAsync<JsonElement>("https://scriptblox.com/api/script/fetch"); 
-        foreach (JsonElement script in scripts.GetProperty("result").GetProperty("scripts"))
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                // Main card container
-                Border card = new Border()
-                {
-                    Width = 380,
-                    Height = 270,
-                    Background = new SolidColorBrush(Color.FromRgb(24, 24, 24)), // Dark gray card
-                    CornerRadius = new CornerRadius(12),
-                    Padding = new Thickness(12),
-                    Margin = new Thickness(10),
-                    Effect = new System.Windows.Media.Effects.DropShadowEffect()
-                    {
-                        Color = Colors.Black,
-                        BlurRadius = 10,
-                        ShadowDepth = 2
-                    }
-                };
-
-                StackPanel content = new StackPanel();
-
-                // Title
-                TextBlock title = new TextBlock()
-                {
-                    Text = script.GetProperty("title").GetString(),
-                    FontSize = 18,
-                    FontWeight = FontWeights.Bold,
-                    Foreground = Brushes.White
-                };
-                content.Children.Add(title);
-
-                // Game name
-                if (script.TryGetProperty("game", out JsonElement game))
-                {
-                    TextBlock gameName = new TextBlock()
-                    {
-                        Text = game.GetProperty("name").GetString(),
-                        FontSize = 14,
-                        Foreground = Brushes.LightGray,
-                        Margin = new Thickness(0, 2, 0, 6)
-                    };
-                    content.Children.Add(gameName);
-                }
-
-                // Description
-                if (script.TryGetProperty("description", out JsonElement description))
-                {
-                    TextBlock desc = new TextBlock()
-                    {
-                        Text = description.GetString(),
-                        FontSize = 13,
-                        TextWrapping = TextWrapping.Wrap,
-                        Foreground = Brushes.Gray,
-                        Margin = new Thickness(0, 0, 0, 10)
-                    };
-                    content.Children.Add(desc);
-                }
-
-                // Tags (horizontal)
-                if (script.TryGetProperty("tags", out JsonElement tags) && tags.ValueKind == JsonValueKind.Array)
-                {
-                    StackPanel tagPanel = new StackPanel()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Margin = new Thickness(0, 5, 0, 10)
-                    };
-
-                    foreach (JsonElement tag in tags.EnumerateArray())
-                    {
-                        Border tagBox = new Border()
-                        {
-                            Background = new SolidColorBrush(Color.FromRgb(255, 140, 0)), // orange
-                            CornerRadius = new CornerRadius(10),
-                            Padding = new Thickness(8, 4, 8, 4),
-                            Margin = new Thickness(0, 0, 5, 0)
-                        };
-
-                        TextBlock tagText = new TextBlock()
-                        {
-                            Text = tag.GetString(),
-                            Foreground = Brushes.Black,
-                            FontSize = 12,
-                            FontWeight = FontWeights.SemiBold
-                        };
-
-                        tagBox.Child = tagText;
-                        tagPanel.Children.Add(tagBox);
-                    }
-
-                    content.Children.Add(tagPanel);
-                }
-
-                // Footer info (views, likes, date)
-                StackPanel footer = new StackPanel()
-                {
-                    Orientation = Orientation.Horizontal,
-                    HorizontalAlignment = HorizontalAlignment.SpaceBetween
-                };
-
-                TextBlock views = new TextBlock()
-                {
-                    Text = $"👁 {script.GetProperty("views").GetInt32()}",
-                    Foreground = Brushes.LightGray,
-                    FontSize = 12,
-                    Margin = new Thickness(0, 0, 15, 0)
-                };
-
-                TextBlock likes = new TextBlock()
-                {
-                    Text = $"❤️ {script.GetProperty("likes").GetInt32()}",
-                    Foreground = Brushes.LightGray,
-                    FontSize = 12,
-                    Margin = new Thickness(0, 0, 15, 0)
-                };
-
-                TextBlock date = new TextBlock()
-                {
-                    Text = $"📅 {script.GetProperty("updatedAt").GetString()}",
-                    Foreground = Brushes.LightGray,
-                    FontSize = 12
-                };
-
-                footer.Children.Add(views);
-                footer.Children.Add(likes);
-                footer.Children.Add(date);
-
-                content.Children.Add(footer);
-
-                card.Child = content;
-                ScriptPanel.Children.Add(card);
-            });
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScriptBlox UI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0d0d0f;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
-    catch (HttpRequestException e)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            ScriptPanel.Children.Add(new TextBlock()
-            {
-                Text = $"Network error while fetching scripts:\n{e.Message}",
-                Margin = new Thickness(10)
-            });
+
+    h1 {
+      margin: 20px;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #3b82f6, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      padding: 24px;
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #1a1a1d, #121214);
+      border: 1px solid #2a2a2d;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.7);
+      border-color: #3b82f6;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #aaa;
+      flex-grow: 1;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #18181b;
+      border-radius: 18px;
+      padding: 24px;
+      max-width: 700px;
+      width: 90%;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .modal button {
+      margin-top: 16px;
+      padding: 10px 18px;
+      background: linear-gradient(90deg, #3b82f6, #f97316);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .modal button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 ScriptBlox Scripts</h1>
+  <div class="grid" id="scriptGrid"></div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <button id="copyBtn">📋 Copy Script</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const grid = document.getElementById("scriptGrid");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+    const copyBtn = document.getElementById("copyBtn");
+
+    let currentScriptCode = "";
+
+    async function fetchScripts() {
+      try {
+        const res = await fetch("https://scriptblox.com/api/script/fetch");
+        const data = await res.json();
+        const scripts = data.result.scripts;
+
+        scripts.forEach(script => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <h2>${script.title}</h2>
+            <p>${script.description || "No description available."}</p>
+          `;
+          card.onclick = () => openModal(script);
+          grid.appendChild(card);
         });
+      } catch (err) {
+        console.error("Error fetching scripts:", err);
+        grid.innerHTML = `<p>⚠️ Failed to load scripts.</p>`;
+      }
     }
-    catch (JsonException e)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            ScriptPanel.Children.Add(new TextBlock()
-            {
-                Text = $"Error parsing JSON response:\n{e.Message}",
-                Margin = new Thickness(10)
-            });
-        });
+
+    function openModal(script) {
+      modal.classList.add("active");
+      modalTitle.textContent = script.title;
+      modalDesc.textContent = script.script || "No script code available.";
+      currentScriptCode = script.script || "";
     }
-    catch (Exception e)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            ScriptPanel.Children.Add(new TextBlock()
-            {
-                Text = $"Unexpected error:\n{e.Message}",
-                Margin = new Thickness(10)
-            });
-        });
+
+    function closeModal() {
+      modal.classList.remove("active");
     }
-}
+
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(currentScriptCode);
+      copyBtn.textContent = "✅ Copied!";
+      setTimeout(() => (copyBtn.textContent = "📋 Copy Script"), 2000);
+    };
+
+    fetchScripts();
+  </script>
+</body>
+</html>
