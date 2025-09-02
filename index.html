@@ -1,546 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RoScript Browser</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Icons -->
-<link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
-<style>
-  /* ===========================
-     Roblox-ish Dark Gaming Theme
-     =========================== */
-  :root{
-    --background: hsl(215 28% 9%);
-    --foreground: hsl(213 31% 91%);
-    --card: hsl(215 25% 12%);
-    --card-foreground: hsl(213 31% 91%);
-    --popover: hsl(215 25% 12%);
-    --border: hsl(215 25% 20%);
-    --muted: hsl(215 25% 16%);
-    --muted-foreground: hsl(213 19% 65%);
-    --primary: hsl(213 94% 68%);
-    --primary-foreground: hsl(215 28% 9%);
-    --secondary: hsl(25 95% 60%);
-    --destructive: hsl(0 84% 60%);
-    --success: hsl(142 71% 45%);
+using System.Text.Json;
+using System.Net.Http.Json;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
-    --radius: 12px;
-
-    --shadow-card: 0 8px 28px rgba(8,12,16,.45);
-    --shadow-elev: 0 18px 48px rgba(8,12,16,.65);
-  }
-
-  *{ box-sizing: border-box; }
-  html, body{ height:100% }
-  body{
-    margin:0;
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    color:var(--foreground);
-    background: radial-gradient(1200px 600px at 50% -10%, hsl(215 25% 12% / .55), transparent 60%) , var(--background);
-    background-color: var(--background);
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar{ width: 10px; height:10px}
-  ::-webkit-scrollbar-track{ background: var(--muted) }
-  ::-webkit-scrollbar-thumb{ background: color-mix(in hsl, var(--primary) 40%, transparent); border-radius: 999px }
-  ::-webkit-scrollbar-thumb:hover{ background: var(--primary) }
-
-  /* Utility-ish */
-  .container{ max-width: 1200px; margin: 0 auto; padding-inline: 20px }
-  .row{ display:grid; gap:22px }
-  @media (min-width: 640px){ .row{ grid-template-columns: repeat(2, minmax(0,1fr)) } }
-  @media (min-width: 1024px){ .row{ grid-template-columns: repeat(4, minmax(0,1fr)) } }
-
-  .chip{
-    display:inline-flex; align-items:center; gap:6px;
-    padding:.36rem .6rem; font-size:.78rem; line-height:1;
-    color: var(--foreground);
-    background: hsl(215 25% 16% / .55);
-    border: 1px solid hsl(215 25% 22% / .65);
-    border-radius: 999px;
-    backdrop-filter: blur(6px);
-    white-space: nowrap;
-  }
-  .chip i{ font-size: 1rem; opacity:.85 }
-
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-    height: 42px; padding: 0 16px; font-weight: 600; border-radius: 10px;
-    border: 1px solid hsl(215 25% 22%);
-    color: var(--primary-foreground);
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    box-shadow: 0 6px 20px color-mix(in hsl, var(--primary) 25%, transparent);
-    cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-  }
-  .btn:hover{ transform: translateY(-1px) scale(1.02); filter: saturate(1.05); }
-  .btn:active{ transform: translateY(0); }
-  .btn.ghost{
-    background: transparent; color: var(--foreground);
-    box-shadow: none; border: 1px solid var(--border);
-  }
-  .btn.copy{ height: 38px; padding-inline: 12px; font-weight: 600; }
-
-  /* Header */
-  .topbar{
-    position: sticky; top:0; z-index: 30;
-    backdrop-filter: blur(10px);
-    background: linear-gradient(180deg, rgba(7,10,14,.75), rgba(7,10,14,.35) 60%, transparent);
-    border-bottom: 1px solid hsl(215 25% 13%);
-  }
-  .brand{
-    display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.3px; font-size: 1.05rem;
-  }
-  .brand .logo{
-    display:grid; place-items:center; width:34px; height:34px; border-radius:10px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--primary-foreground); font-weight: 800;
-    box-shadow: 0 8px 24px color-mix(in hsl, var(--primary) 35%, transparent);
-  }
-  .search{
-    display:flex; align-items:center; gap:.6rem; height:42px; padding:0 14px; width: 100%;
-    background:hsl(215 25% 12% / .9); border:1px solid var(--border);
-    border-radius: 12px; color:var(--foreground);
-  }
-  .search input{
-    flex:1; background:transparent; border:0; outline:0; color:inherit; font-size:.95rem;
-  }
-
-  /* Page hero */
-  .hero{ text-align:center; padding: 42px 0 24px }
-  .hero h1{
-    font-size: clamp(28px, 4.5vw, 46px);
-    margin:0 0 8px; font-weight: 800; letter-spacing:.4px;
-    background: linear-gradient(135deg, var(--foreground), color-mix(in hsl, var(--foreground) 70%, var(--primary)));
-    -webkit-background-clip:text; background-clip:text; color: transparent;
-  }
-  .hero p{ margin:0; color: var(--muted-foreground); font-size: clamp(14px, 2vw, 16px) }
-
-  /* Cards */
-  .card{
-    position: relative; display:flex; flex-direction:column; gap:12px;
-    padding:18px; background: linear-gradient(145deg, hsl(215 25% 13%), hsl(215 25% 10%));
-    border:1px solid hsl(215 25% 18% / .9);
-    border-radius: 16px; box-shadow: var(--shadow-card);
-    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
-    overflow:hidden;
-  }
-  .card:hover{
-    transform: translateY(-2px);
-    border-color: color-mix(in hsl, var(--primary) 28%, hsl(215 25% 18%));
-    box-shadow: 0 14px 40px rgba(12,16,20,.65);
-  }
-  .card .title{ margin:0; font-size: 1.05rem; font-weight: 700; letter-spacing:.2px }
-  .card .subtitle{ margin:0; color: var(--muted-foreground); font-size: .9rem }
-  .card .desc{ margin:2px 0 8px; color: color-mix(in hsl, var(--foreground) 78%, black); font-size:.92rem; min-height:56px }
-  .card .tags{ display:flex; flex-wrap: wrap; gap:8px; }
-  .card .meta{
-    display:flex; align-items:center; gap:16px; padding-top:12px; margin-top:8px;
-    border-top:1px solid hsl(215 25% 18% / .9);
-    color: var(--muted-foreground); font-size:.9rem
-  }
-  .pill{
-    position:absolute; right:14px; top:14px; padding:.28rem .55rem; font-size:.78rem; font-weight:700; border-radius:999px;
-    color:white; background: linear-gradient(135deg, var(--destructive), color-mix(in hsl, var(--destructive) 60%, #ff9a9a));
-    border:1px solid color-mix(in hsl, var(--destructive) 60%, black);
-    box-shadow: 0 8px 24px rgba(255,80,80,.35);
-  }
-
-  /* Modal */
-  .modal{
-    position: fixed; inset: 0; display:none; place-items:center; z-index: 50;
-  }
-  .modal.open{ display:grid }
-  .overlay{
-    position:absolute; inset:0; background: rgba(0,0,0,.70); animation: fadeIn .18s ease both;
-  }
-  .sheet{
-    position: relative; width:min(960px, 92vw); max-height: 86vh; overflow:auto;
-    background: linear-gradient(145deg, hsl(215 25% 14%), hsl(215 25% 9%));
-    border:1px solid hsl(215 25% 18% / .95);
-    border-radius: 18px; box-shadow: var(--shadow-elev); padding: 20px 20px 24px;
-    animation: popIn .2s cubic-bezier(.18,.8,.2,1) both;
-  }
-  @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
-  @keyframes popIn{
-    0%{ opacity:0; transform: translateY(6px) scale(.96) }
-    100%{ opacity:1; transform: translateY(0) scale(1) }
-  }
-  .sheet .sheet-head{
-    display:flex; align-items:center; gap:12px; padding-bottom:12px; border-bottom:1px solid hsl(215 25% 18%);
-  }
-  .sheet .game{
-    font-weight:700; font-size: 1.28rem; margin:0;
-  }
-  .sheet .badges{ display:flex; align-items:center; gap:8px; margin-left:auto }
-  .close{
-    display:grid; place-items:center; width:38px; height:38px; border-radius: 12px; cursor:pointer;
-    color: var(--foreground); background: hsl(215 25% 14% / .8); border:1px solid var(--border);
-    transition: transform .16s ease, background .16s ease, border-color .16s ease;
-  }
-  .close:hover{ transform: translateY(-1px); background: hsl(215 25% 16%); border-color: color-mix(in hsl, var(--primary) 30%, var(--border)) }
-
-  .profile{
-    display:flex; align-items:center; gap:10px; margin-top:8px; color: var(--muted-foreground)
-  }
-  .avatar{
-    width:30px; height:30px; border-radius: 10px; display:grid; place-items:center; font-weight:800;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--primary-foreground);
-  }
-
-  .section{ margin-top: 18px }
-  .section h4{ margin:0 0 8px; font-size: .98rem; color: var(--muted-foreground); font-weight:700; letter-spacing:.2px }
-  .codebox{
-    background: hsl(215 25% 11%);
-    border: 1px solid hsl(215 25% 18%);
-    border-radius: 12px;
-    padding: 12px; position: relative;
-  }
-  pre{
-    margin:0; overflow:auto; max-height: 48vh; padding-right: 8px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: .92rem; line-height: 1.5;
-    color: #dfe8ff;
-  }
-  .code-actions{
-    position:absolute; top:10px; right:10px; display:flex; gap:8px;
-  }
-
-  /* Helpful extras the user asked to keep */
-  #root{ max-width: 1280px; margin: 0 auto; padding: 2rem; text-align:center }
-  .logo{ height: 6em; padding: 1.5em; transition: filter 300ms; will-change: filter }
-  .logo:hover{ filter: drop-shadow(0 0 2em #646cffaa) }
-  .logo.react:hover{ filter: drop-shadow(0 0 2em #61dafbaa) }
-  @keyframes logo-spin{ from{ transform: rotate(0) } to{ transform: rotate(360deg) } }
-  @media (prefers-reduced-motion: no-preference){
-    a:nth-of-type(2) .logo{ animation: logo-spin infinite 20s linear }
-  }
-  .card-pad{ padding: 2em }
-  .read-the-docs{ color:#888 }
-
-  /* Small helpers */
-  .truncate2{
-    display:-webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow:hidden;
-  }
-  .meta i{ font-size: 1.05rem }
-
-  /* Center top bar content nicely on large screens */
-  .topbar .container{
-    display:flex; align-items:center; gap:16px; padding-block: 10px;
-  }
-  .topbar .container > .brand{ min-width: 170px }
-  .topbar .container > .search-wrap{ flex: 1 }
-  .search-wrap{ display:flex; gap:10px; align-items:center }
-  .action-btn{ width:42px; height:42px; display:grid; place-items:center; border-radius:12px; border:1px solid var(--border); background:hsl(215 25% 12%) }
-  .action-btn:hover{ border-color: color-mix(in hsl, var(--primary) 35%, var(--border)) }
-</style>
-</head>
-<body>
-
-  <!-- Top Nav -->
-  <header class="topbar">
-    <div class="container">
-      <div class="brand">
-        <div class="logo">R</div>
-        RoScript
-      </div>
-
-      <div class="search-wrap">
-        <div class="search">
-          <i class="ri-search-line" style="opacity:.85"></i>
-          <input id="search" placeholder="Search for Roblox scripts..." />
-          <button class="action-btn" title="Refresh"><i class="ri-refresh-line"></i></button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section class="hero container">
-    <h1>RoScript Browser</h1>
-    <p>Discover and download the best Roblox scripts from ScriptBlox. Find working scripts with a clean, modern interface.</p>
-  </section>
-
-  <!-- Cards Grid -->
-  <main class="container" style="padding-bottom: 64px">
-    <div id="grid" class="row"></div>
-  </main>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="overlay" data-close></div>
-    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
-      <div class="sheet-head">
-        <h2 id="sheet-title" class="game">Game Title</h2>
-        <div class="badges">
-          <span class="pill" id="sheet-patch" style="display:none;">Patched</span>
-          <button class="close" data-close title="Close"><i class="ri-close-line"></i></button>
-        </div>
-      </div>
-
-      <div class="profile">
-        <div class="avatar">K</div>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
-          <span class="chip"><i class="ri-user-3-line"></i><span id="sheet-author">ScriptMaster</span></span>
-          <span class="chip"><i class="ri-eye-line"></i><span id="sheet-views">0</span> views</span>
-          <span class="chip"><i class="ri-heart-3-line"></i><span id="sheet-likes">0</span> likes</span>
-          <span class="chip"><i class="ri-calendar-line"></i><span id="sheet-date">—</span></span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div id="sheet-tags" class="tags"></div>
-      </div>
-
-      <div class="section">
-        <h4>Description</h4>
-        <p id="sheet-desc" style="margin:0; color: var(--card-foreground)"></p>
-      </div>
-
-      <div class="section">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
-          <h4 style="margin:0">Script Code</h4>
-          <div class="code-actions">
-            <button id="copyBtn" class="btn copy"><i class="ri-file-copy-line"></i>Copy Script</button>
-          </div>
-        </div>
-        <div class="codebox">
-          <pre id="sheet-code"></pre>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-  // ==========================
-  // Demo data (edit as needed)
-  // ==========================
-  const scripts = [
+public async Task FetchScripts()
+{
+    HttpClient client = new HttpClient();
+    try
     {
-      id: 'universal-hub',
-      title: 'Universal Script Hub',
-      game: 'Universal',
-      patched: false,
-      desc: 'A comprehensive script hub with multiple game support including Arsenal, Phantom Forces, and more. Features auto-aim, ESP, and customizable GUI.',
-      tags: ['Universal','GUI','Auto-Aim'],
-      views: '125.0K', likes: '6.2K', date: 'Jan 14, 2024',
-      author: 'ScriptMaster',
-      code: `-- Universal Script Hub
-loadstring(game:HttpGet("https://example.com/universal.lua"))()
-print("Universal Script Hub Loaded!")`
-    },
-    {
-      id: 'arsenal-aimbot',
-      title: 'Arsenal Aimbot & ESP',
-      game: 'Arsenal',
-      patched: false,
-      desc: 'Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications. Updated for latest Arsenal version.',
-      tags: ['Arsenal','Aimbot','ESP','Wallhack'],
-      views: '89.0K', likes: '3.1K', date: 'Jan 31, 2024',
-      author: 'CombatHacker',
-      code: `-- Arsenal Script
-print("Arsenal Script Loaded!")
--- your aimbot / esp here`
-    },
-    {
-      id: 'blox-fruits-farm',
-      title: 'Blox Fruits Auto Farm',
-      game: 'Blox Fruits',
-      patched: true,
-      desc: 'Complete auto-farming script for Blox Fruits with level detection, quest automation, and fruit collection. Safe and undetectable.',
-      tags: ['Blox Fruits','Auto Farm','Quests'],
-      views: '234.0K', likes: '12.3K', date: 'Jan 27, 2024',
-      author: 'FarmBot2024',
-      code: `-- Blox Fruits AutoFarm
-while true do
-  -- farming loop
-  task.wait(0.5)
-end`
-    },
-    {
-      id: 'phantom-aimbot',
-      title: 'Phantom Forces Aimbot',
-      game: 'Phantom Forces',
-      patched: false,
-      desc: 'Highly accurate aimbot for Phantom Forces with customizable settings, silent aim, and anti-detection features.',
-      tags: ['Phantom Forces','Aimbot','Silent Aim'],
-      views: '67.0K', likes: '5.1K', date: 'Feb 9, 2024',
-      author: 'TacticalShooter',
-      code: `-- Phantom Forces Aimbot
--- example placeholder
-print("PF Aimbot Loaded!")`
-    },
-    {
-      id: 'dahood-menu',
-      title: 'Da Hood Mod Menu',
-      game: 'Da Hood',
-      patched: false,
-      desc: 'Complete mod menu for Da Hood with teleports, money farming, anti-admin, and custom animations. Regular updates.',
-      tags: ['Da Hood','Mod Menu','Teleports'],
-      views: '156.0K', likes: '8.7K', date: 'Feb 4, 2024',
-      author: 'HoodScripts',
-      code: `-- Da Hood Mod Menu
-loadstring(game:HttpGet("https://example.com/dahood.lua"))()`
-    },
-    {
-      id: 'petsimx-dup',
-      title: 'Pet Simulator X Duplication',
-      game: 'Pet Simulator X',
-      patched: true,
-      desc: 'Working pet and gem duplication script for Pet Simulator X. Includes auto-hatch, mailbox stealer, and more advanced features.',
-      tags: ['Pet Sim X','Duplication','Auto Hatch','Gems'],
-      views: '198.0K', likes: '12.3K', date: 'Jan 19, 2024',
-      author: 'PetMaster99',
-      code:
-`-- Pet Simulator X Script
--- WARNING: Duplication methods patched!
+        JsonElement scripts = await client.GetFromJsonAsync<JsonElement>("https://scriptblox.com/api/script/fetch"); 
+        foreach (JsonElement script in scripts.GetProperty("result").GetProperty("scripts"))
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Main card container
+                Border card = new Border()
+                {
+                    Width = 380,
+                    Height = 270,
+                    Background = new SolidColorBrush(Color.FromRgb(24, 24, 24)), // Dark gray card
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(12),
+                    Margin = new Thickness(10),
+                    Effect = new System.Windows.Media.Effects.DropShadowEffect()
+                    {
+                        Color = Colors.Black,
+                        BlurRadius = 10,
+                        ShadowDepth = 2
+                    }
+                };
 
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local localPlayer = Players.LocalPlayer
+                StackPanel content = new StackPanel();
 
-print("Pet Simulator X Script - Some features may be patched")
+                // Title
+                TextBlock title = new TextBlock()
+                {
+                    Text = script.GetProperty("title").GetString(),
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = Brushes.White
+                };
+                content.Children.Add(title);
 
--- functions (limited due to patches)
-local function autoHatch()
-  print("Auto-hatch feature may be limited due to anti-cheat")
-  -- basic example
-  while true do
-    task.wait(1)
-  end
-end`
-    },
-  ];
+                // Game name
+                if (script.TryGetProperty("game", out JsonElement game))
+                {
+                    TextBlock gameName = new TextBlock()
+                    {
+                        Text = game.GetProperty("name").GetString(),
+                        FontSize = 14,
+                        Foreground = Brushes.LightGray,
+                        Margin = new Thickness(0, 2, 0, 6)
+                    };
+                    content.Children.Add(gameName);
+                }
 
-  // ==========================
-  // Render card grid
-  // ==========================
-  const grid = document.getElementById('grid');
+                // Description
+                if (script.TryGetProperty("description", out JsonElement description))
+                {
+                    TextBlock desc = new TextBlock()
+                    {
+                        Text = description.GetString(),
+                        FontSize = 13,
+                        TextWrapping = TextWrapping.Wrap,
+                        Foreground = Brushes.Gray,
+                        Margin = new Thickness(0, 0, 0, 10)
+                    };
+                    content.Children.Add(desc);
+                }
 
-  function cardTemplate(s) {
-    return `
-    <article class="card" data-id="${s.id}">
-      ${s.patched ? `<span class="pill">Patched</span>` : ``}
-      <h3 class="title">${s.title}</h3>
-      <p class="subtitle">${s.game}</p>
-      <p class="desc truncate2">${s.desc}</p>
-      <div class="tags">
-        ${s.tags.map(t => `<span class="chip">${t}</span>`).join('')}
-      </div>
-      <div class="meta">
-        <span class="chip"><i class="ri-eye-line"></i>${s.views}</span>
-        <span class="chip"><i class="ri-heart-3-line"></i>${s.likes}</span>
-        <span class="chip"><i class="ri-calendar-line"></i>${s.date}</span>
-        <span style="margin-left:auto"></span>
-        <button class="action-btn" title="Open"><i class="ri-external-link-line"></i></button>
-      </div>
-    </article>`;
-  }
+                // Tags (horizontal)
+                if (script.TryGetProperty("tags", out JsonElement tags) && tags.ValueKind == JsonValueKind.Array)
+                {
+                    StackPanel tagPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Margin = new Thickness(0, 5, 0, 10)
+                    };
 
-  function render(list){
-    grid.innerHTML = list.map(cardTemplate).join('');
-  }
-  render(scripts);
+                    foreach (JsonElement tag in tags.EnumerateArray())
+                    {
+                        Border tagBox = new Border()
+                        {
+                            Background = new SolidColorBrush(Color.FromRgb(255, 140, 0)), // orange
+                            CornerRadius = new CornerRadius(10),
+                            Padding = new Thickness(8, 4, 8, 4),
+                            Margin = new Thickness(0, 0, 5, 0)
+                        };
 
-  // ==========================
-  // Search
-  // ==========================
-  const search = document.getElementById('search');
-  search.addEventListener('input', e => {
-    const q = e.target.value.toLowerCase().trim();
-    const filtered = scripts.filter(s =>
-      s.title.toLowerCase().includes(q) ||
-      s.game.toLowerCase().includes(q) ||
-      s.tags.join(' ').toLowerCase().includes(q)
-    );
-    render(filtered);
-  });
+                        TextBlock tagText = new TextBlock()
+                        {
+                            Text = tag.GetString(),
+                            Foreground = Brushes.Black,
+                            FontSize = 12,
+                            FontWeight = FontWeights.SemiBold
+                        };
 
-  // ==========================
-  // Modal interactions
-  // ==========================
-  const modal = document.getElementById('modal');
-  const sheetTitle = document.getElementById('sheet-title');
-  const sheetPatch = document.getElementById('sheet-patch');
-  const sheetAuthor = document.getElementById('sheet-author');
-  const sheetViews = document.getElementById('sheet-views');
-  const sheetLikes = document.getElementById('sheet-likes');
-  const sheetDate = document.getElementById('sheet-date');
-  const sheetTags = document.getElementById('sheet-tags');
-  const sheetDesc = document.getElementById('sheet-desc');
-  const sheetCode = document.getElementById('sheet-code');
+                        tagBox.Child = tagText;
+                        tagPanel.Children.Add(tagBox);
+                    }
 
-  // delegate open
-  document.addEventListener('click', (e) => {
-    const card = e.target.closest('.card');
-    if(card){
-      const id = card.dataset.id;
-      const s = scripts.find(x => x.id === id);
-      if(!s) return;
+                    content.Children.Add(tagPanel);
+                }
 
-      // Fill data
-      sheetTitle.textContent = s.title;
-      sheetPatch.style.display = s.patched ? '' : 'none';
-      sheetAuthor.textContent = s.author;
-      sheetViews.textContent = s.views;
-      sheetLikes.textContent = s.likes;
-      sheetDate.textContent = s.date;
-      sheetTags.innerHTML = s.tags.map(t => `<span class="chip">${t}</span>`).join('');
-      sheetDesc.textContent = s.desc;
-      sheetCode.textContent = s.code;
+                // Footer info (views, likes, date)
+                StackPanel footer = new StackPanel()
+                {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.SpaceBetween
+                };
 
-      // Open modal
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      // focus close for a11y
-      setTimeout(()=> document.querySelector('.close').focus(), 30);
+                TextBlock views = new TextBlock()
+                {
+                    Text = $"👁 {script.GetProperty("views").GetInt32()}",
+                    Foreground = Brushes.LightGray,
+                    FontSize = 12,
+                    Margin = new Thickness(0, 0, 15, 0)
+                };
+
+                TextBlock likes = new TextBlock()
+                {
+                    Text = $"❤️ {script.GetProperty("likes").GetInt32()}",
+                    Foreground = Brushes.LightGray,
+                    FontSize = 12,
+                    Margin = new Thickness(0, 0, 15, 0)
+                };
+
+                TextBlock date = new TextBlock()
+                {
+                    Text = $"📅 {script.GetProperty("updatedAt").GetString()}",
+                    Foreground = Brushes.LightGray,
+                    FontSize = 12
+                };
+
+                footer.Children.Add(views);
+                footer.Children.Add(likes);
+                footer.Children.Add(date);
+
+                content.Children.Add(footer);
+
+                card.Child = content;
+                ScriptPanel.Children.Add(card);
+            });
+        }
     }
-
-    // Close buttons or overlay
-    if(e.target.matches('[data-close]') || e.target.closest('[data-close]')){
-      closeModal();
+    catch (HttpRequestException e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            ScriptPanel.Children.Add(new TextBlock()
+            {
+                Text = $"Network error while fetching scripts:\n{e.Message}",
+                Margin = new Thickness(10)
+            });
+        });
     }
-  });
-
-  function closeModal(){
-    // play reverse-ish animation by cloning sheet quickly
-    const sheet = modal.querySelector('.sheet');
-    sheet.style.animation = 'fadeIn .15s ease reverse both, popIn .15s ease reverse both';
-    const overlay = modal.querySelector('.overlay');
-    overlay.style.animation = 'fadeIn .15s ease reverse both';
-
-    setTimeout(() => {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      // reset animations
-      sheet.style.animation = '';
-      overlay.style.animation = '';
-    }, 140);
-  }
-
-  // Escape closes
-  window.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
-
-  // Copy to clipboard
-  document.getElementById('copyBtn').addEventListener('click', async () => {
-    try{
-      await navigator.clipboard.writeText(sheetCode.textContent);
-      const btn = document.getElementById('copyBtn');
-      const old = btn.innerHTML;
-      btn.innerHTML = '<i class="ri-check-line"></i>Copied';
-      setTimeout(()=> btn.innerHTML = old, 1200);
-    }catch(err){
-      alert('Copy failed: ' + err);
+    catch (JsonException e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            ScriptPanel.Children.Add(new TextBlock()
+            {
+                Text = $"Error parsing JSON response:\n{e.Message}",
+                Margin = new Thickness(10)
+            });
+        });
     }
-  });
-</script>
-</body>
-</html>
+    catch (Exception e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            ScriptPanel.Children.Add(new TextBlock()
+            {
+                Text = $"Unexpected error:\n{e.Message}",
+                Margin = new Thickness(10)
+            });
+        });
+    }
+}
