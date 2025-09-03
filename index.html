@@ -2,185 +2,250 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ScriptBlox UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoScript Browser</title>
   <style>
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #0d0d0f;
-      color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    header {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
     }
 
-    h1 {
-      margin: 20px;
-      font-size: 2rem;
-      background: linear-gradient(90deg, #3b82f6, #f97316);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
     }
 
-    .grid {
+    header input {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
+      width: 300px;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      width: 100%;
-      max-width: 1200px;
+      gap: 1.5rem;
     }
 
     .card {
-      background: linear-gradient(145deg, #1a1a1d, #121214);
-      border: 1px solid #2a2a2d;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      background: #1e293b;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      overflow: hidden;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.6);
-      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
 
     .card h2 {
-      margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
       color: #fff;
     }
 
     .card p {
       font-size: 0.9rem;
-      color: #aaa;
+      color: #94a3b8;
+      margin-bottom: 0.75rem;
       flex-grow: 1;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      background: #334155;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #94a3b8;
     }
 
     /* Modal */
     .modal {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      justify-content: center;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
       align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 100;
-    }
-
-    .modal.active {
-      opacity: 1;
-      pointer-events: auto;
+      justify-content: center;
+      z-index: 1000;
     }
 
     .modal-content {
-      background: #18181b;
-      border-radius: 18px;
-      padding: 24px;
-      max-width: 650px;
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 700px;
       width: 90%;
-      transform: scale(0.8);
-      opacity: 0;
-      transition: all 0.3s ease;
+      position: relative;
+      animation: fadeIn 0.3s ease;
     }
 
-    .modal.active .modal-content {
-      transform: scale(1);
-      opacity: 1;
+    .modal-content pre {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      max-height: 400px;
+      overflow: auto;
+      color: #e2e8f0;
     }
 
-    .modal h2 {
-      margin-top: 0;
-    }
-
-    .modal button {
-      margin-top: 16px;
-      padding: 10px 18px;
-      background: linear-gradient(90deg, #3b82f6, #f97316);
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #334155;
       border: none;
-      border-radius: 8px;
       color: #fff;
+      border-radius: 0.5rem;
+      padding: 0.3rem 0.6rem;
       cursor: pointer;
-      transition: transform 0.2s ease;
     }
 
-    .modal button:hover {
-      transform: scale(1.05);
+    .copy-btn {
+      margin-top: 1rem;
+      background: #3b82f6;
+      border: none;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
-  <h1>🔥 ScriptBlox Scripts</h1>
-  <div class="grid" id="scriptGrid"></div>
+  <header>
+    <h1>RoScript</h1>
+    <input type="text" id="search" placeholder="Search for Roblox scripts...">
+  </header>
+
+  <div class="container">
+    <h2 style="text-align:center; margin-bottom:1.5rem;">RoScript Browser</h2>
+    <div class="cards" id="cards"></div>
+  </div>
 
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
+      <button class="close-btn" id="closeModal">✖</button>
       <h2 id="modalTitle"></h2>
       <p id="modalDesc"></p>
-      <button id="copyBtn">📋 Copy Script</button>
-      <button onclick="closeModal()">Close</button>
+      <pre id="modalScript"></pre>
+      <button class="copy-btn" id="copyBtn">Copy Script</button>
     </div>
   </div>
 
   <script>
-    const grid = document.getElementById("scriptGrid");
-    const modal = document.getElementById("modal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDesc = document.getElementById("modalDesc");
-    const copyBtn = document.getElementById("copyBtn");
+    const cardsContainer = document.getElementById('cards');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalScript = document.getElementById('modalScript');
+    const closeModal = document.getElementById('closeModal');
+    const copyBtn = document.getElementById('copyBtn');
+    const searchInput = document.getElementById('search');
 
-    let currentScriptCode = "";
+    let scriptsData = [];
 
     async function fetchScripts() {
       try {
-        const res = await fetch("https://scriptblox.com/api/script/fetch");
+        const res = await fetch('https://scriptblox.com/api/script/fetch');
         const data = await res.json();
-        const scripts = data.result.scripts;
-
-        scripts.forEach(script => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <h2>${script.title}</h2>
-            <p>${script.description || "No description available."}</p>
-          `;
-          card.onclick = () => openModal(script);
-          grid.appendChild(card);
-        });
+        scriptsData = data.result.scripts;
+        renderCards(scriptsData);
       } catch (err) {
-        console.error("Error fetching scripts:", err);
-        grid.innerHTML = `<p>⚠️ Failed to load scripts.</p>`;
+        console.error('Error fetching scripts:', err);
       }
     }
 
+    function renderCards(scripts) {
+      cardsContainer.innerHTML = '';
+      scripts.forEach(script => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h2>${script.title}</h2>
+          <p>${script.game?.name || "Unknown Game"}</p>
+          <div class="tags">
+            ${(script.keywords?.slice(0,3) || ["Script"]).map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+          <div class="stats">
+            <span>👁 ${script.views || 0}</span>
+            <span>❤️ ${script.likes || 0}</span>
+            <span>📅 ${new Date(script.createdAt).toLocaleDateString()}</span>
+          </div>
+        `;
+        card.addEventListener('click', () => openModal(script));
+        cardsContainer.appendChild(card);
+      });
+    }
+
     function openModal(script) {
-      modal.classList.add("active");
+      modal.style.display = 'flex';
       modalTitle.textContent = script.title;
-      modalDesc.textContent = script.script || "No script code available.";
-      currentScriptCode = script.script || "";
+      modalDesc.textContent = script.game?.name || "No description available.";
+      modalScript.textContent = script.script || "No script content available.";
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(script.script || "")
+          .then(() => alert("Script copied!"));
+      };
     }
 
-    function closeModal() {
-      modal.classList.remove("active");
-    }
+    closeModal.addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(currentScriptCode);
-      copyBtn.textContent = "✅ Copied!";
-      setTimeout(() => (copyBtn.textContent = "📋 Copy Script"), 2000);
-    };
+    searchInput.addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      const filtered = scriptsData.filter(s => s.title.toLowerCase().includes(term));
+      renderCards(filtered);
+    });
 
     fetchScripts();
   </script>
