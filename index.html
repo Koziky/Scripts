@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoScript Browser</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
+      font-family: "Inter", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
     }
 
     header {
@@ -17,30 +17,44 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 2rem;
-      background: #1e293b;
-      border-bottom: 1px solid #334155;
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
     }
 
     header h1 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     header input {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: none;
-      outline: none;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 0.75rem;
+      padding: 0.6rem 1rem;
+      color: #e6edf3;
       width: 300px;
-      background: #0f172a;
-      color: #e2e8f0;
     }
 
     .container {
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .container p {
+      text-align: center;
+      color: #8b949e;
+      margin-bottom: 2rem;
     }
 
     .cards {
@@ -50,55 +64,83 @@
     }
 
     .card {
-      background: #1e293b;
-      padding: 1rem;
+      background: #161b22;
+      border: 1px solid #21262d;
       border-radius: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, border 0.2s ease;
       cursor: pointer;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border-color: #30363d;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .card h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      margin: 0;
       color: #fff;
     }
 
+    .patched {
+      background: #f43f5e;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.4rem;
+    }
+
+    .card small {
+      display: block;
+      margin: 0.4rem 0 0.6rem;
+      color: #8b949e;
+      font-size: 0.85rem;
+    }
+
     .card p {
-      font-size: 0.9rem;
-      color: #94a3b8;
-      margin-bottom: 0.75rem;
       flex-grow: 1;
+      font-size: 0.85rem;
+      color: #c9d1d9;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.4rem;
       margin-bottom: 1rem;
     }
 
     .tag {
-      background: #334155;
+      background: #21262d;
       padding: 0.2rem 0.6rem;
       border-radius: 0.5rem;
-      font-size: 0.75rem;
-      color: #cbd5e1;
+      font-size: 0.7rem;
+      color: #8b949e;
     }
 
     .stats {
       display: flex;
       justify-content: space-between;
       font-size: 0.8rem;
-      color: #94a3b8;
+      color: #8b949e;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid #21262d;
     }
 
     /* Modal */
@@ -114,9 +156,10 @@
     }
 
     .modal-content {
-      background: #1e293b;
-      padding: 2rem;
+      background: #161b22;
+      border: 1px solid #30363d;
       border-radius: 1rem;
+      padding: 2rem;
       max-width: 700px;
       width: 90%;
       position: relative;
@@ -124,19 +167,19 @@
     }
 
     .modal-content pre {
-      background: #0f172a;
+      background: #0d1117;
       padding: 1rem;
       border-radius: 0.5rem;
       max-height: 400px;
       overflow: auto;
-      color: #e2e8f0;
+      color: #e6edf3;
     }
 
     .close-btn {
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: #334155;
+      background: #21262d;
       border: none;
       color: #fff;
       border-radius: 0.5rem;
@@ -146,12 +189,13 @@
 
     .copy-btn {
       margin-top: 1rem;
-      background: #3b82f6;
+      background: #238636;
       border: none;
       color: #fff;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 0.5rem;
       cursor: pointer;
+      font-weight: 600;
     }
 
     @keyframes fadeIn {
@@ -162,12 +206,13 @@
 </head>
 <body>
   <header>
-    <h1>RoScript</h1>
+    <h1>🟠 RoScript</h1>
     <input type="text" id="search" placeholder="Search for Roblox scripts...">
   </header>
 
   <div class="container">
-    <h2 style="text-align:center; margin-bottom:1.5rem;">RoScript Browser</h2>
+    <h2>RoScript Browser</h2>
+    <p>Discover and download the best Roblox scripts from ScriptBlox. Find working scripts with a clean, modern interface.</p>
     <div class="cards" id="cards"></div>
   </div>
 
@@ -211,8 +256,12 @@
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <h2>${script.title}</h2>
-          <p>${script.game?.name || "Unknown Game"}</p>
+          <div class="card-header">
+            <h2>${script.title}</h2>
+            ${script.isPatched ? `<span class="patched">Patched</span>` : ""}
+          </div>
+          <small>${script.game?.name || "Unknown Game"}</small>
+          <p>${script.description || "No description available."}</p>
           <div class="tags">
             ${(script.keywords?.slice(0,3) || ["Script"]).map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
