@@ -1,13 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RoScript Browser</title>
-  <style>
-    /* your full UI CSS here (cards, topbar, modal, etc.) */
-    /* --- KEEPING THE SAME STYLES YOU SHARED EARLIER --- */
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RoScript Browser</title>
+<style>
+  :root{
+    --bg: #0c1117;
+    --panel:#121821;
+    --card:#141b24;
+    --card-2:#111823;
+    --border:#263041;
+    --muted:#8b94a7;
+    --text:#e7edf5;
+    --primary:#3b82f6;   /* blue accent */
+    --good:#22c55e;
+    --bad:#ef4444;
+    --chip:#1a2433;
+    --ring:#3b82f6;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 500px at 50% -50%, #101726 0%, #0b111a 60%, var(--bg) 100%);
+    color:var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* header */
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter: blur(8px);
+    background:linear-gradient(180deg, rgba(16,23,35,.82), rgba(16,23,35,.6)) ;
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1280px;
+    margin:0 auto;
+    padding:14px 20px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px;
+  }
+  .logo{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg,#ff9966,#ff5e62);
+    display:grid; place-items:center;
+    color:#091116; font-weight:800;
+    border:1px solid #ffb19966;
+    box-shadow:0 4px 14px rgba(255,105,85,.3);
+  }
+  .brand span{opacity:.95}
+
+  .search{
+    margin-left:auto; position:relative; flex:0 1 540px;
+  }
+  .search input{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:12px 44px 12px 44px;
+    border-radius:14px;
+    outline:none;
+    transition:border .2s ease, box-shadow .2s ease;
+  }
+  .search input:focus{
+    border-color:#3b82f699;
+    box-shadow:0 0 0 4px rgba(59,130,246,.15);
+  }
+  .search .icon{
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    opacity:.7;
+  }
+
+  /* hero */
+  .hero{
+    max-width:980px; margin:42px auto 10px; text-align:center; padding:0 16px;
+  }
+  .hero h1{
+    margin:0 0 8px;
+    font-size:42px; line-height:1.15; letter-spacing:.3px;
+    text-shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+  .hero p{margin:0; color:var(--muted)}
+
+  /* grid */
+  .wrap{max-width:1280px; margin:26px auto 80px; padding:0 16px;}
+  .grid{
+    display:grid; gap:22px;
+    grid-template-columns:repeat(12, 1fr);
+  }
+  @media (min-width:1150px){ .card{grid-column: span 3;} }
+  @media (min-width:780px) and (max-width:1149px){ .card{grid-column: span 4;} }
+  @media (max-width:779px){ .card{grid-column: span 12;} }
+
+  /* card */
+  .card{
+    background:linear-gradient(180deg,var(--card), var(--card-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    min-height:245px;
+    box-shadow: var(--shadow);
+    position:relative;
+    display:flex; flex-direction:column; gap:10px;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    cursor:pointer; overflow:hidden;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:#3b82f633;
+    box-shadow:0 20px 40px rgba(6,11,19,.65), 0 0 0 1px rgba(59,130,246,.06) inset;
+  }
+  .patched{
+    position:absolute; top:12px; right:12px;
+    background:linear-gradient(180deg, #ff5a6d, #ef4444);
+    color:white; font-size:.75rem; font-weight:700;
+    padding:5px 9px; border-radius:999px;
+    border:1px solid #ff8ea266;
+    box-shadow:0 6px 16px rgba(239,68,68,.35);
+  }
+
+  .title{font-size:18px; font-weight:750; margin-right:80px}
+  .subtitle{color:var(--muted); font-size:.92rem}
+
+  .desc{
+    font-size:.93rem; color:#cbd5e1; line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    margin-top:2px;
+  }
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+  .chip{
+    background:var(--chip);
+    border:1px solid var(--border);
+    color:#c7d1e5;
+    padding:5px 10px;
+    border-radius:999px; font-size:.78rem; white-space:nowrap;
+  }
+
+  .stats{
+    margin-top:auto; padding-top:12px;
+    display:flex; gap:12px; flex-wrap:wrap;
+    border-top:1px dashed #263449;
+  }
+  .pill{
+    display:flex; align-items:center; gap:8px;
+    background:#0f1622; border:1px solid var(--border);
+    padding:7px 12px; border-radius:999px; color:#c0cada; font-size:.85rem;
+  }
+  .pill .i{opacity:.8}
+
+  /* modal */
+  .modal{
+    position:fixed; inset:0; display:none; place-items:center; z-index:50;
+    background:rgba(4,10,18,.65); backdrop-filter: blur(6px);
+    padding:20px;
+  }
+  .sheet{
+    width:min(920px, 95vw);
+    background:linear-gradient(180deg, #121a26, #0f1621);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 40px 120px rgba(0,0,0,.6);
+    overflow:hidden;
+    transform-origin: 50% 42%;
+    animation:sheetIn .26s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes sheetIn{
+    from{opacity:0; transform: translateY(10px) scale(.96)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .sheet-head{
+    padding:18px 20px;
+    display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border);
+  }
+  .sheet-title{font-size:20px; font-weight:800; letter-spacing:.2px}
+  .sheet-game{color:var(--muted)}
+  .sheet-close{
+    margin-left:auto; width:36px; height:36px; display:grid; place-items:center;
+    border-radius:12px; border:1px solid var(--border); background:#0f1621; color:#cbd5e1;
+    cursor:pointer; transition:transform .1s ease, background .15s ease, border-color .15s ease;
+  }
+  .sheet-close:hover{transform:translateY(-2px); border-color:#3b82f655; background:#141d2a}
+
+  .sheet-body{padding:16px 20px 20px; display:grid; gap:16px}
+  .sheet-desc{color:#cad5e7}
+  .code{
+    background:#0a1018; border:1px solid #1f2a3a; color:#e7edf5; border-radius:14px; padding:14px;
+    max-height:380px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,"Liberation Mono","Courier New", monospace;
+    font-size:.9rem; line-height:1.45;
+  }
+  .actions{display:flex; gap:10px; justify-content:flex-end}
+  .btn{
+    border:1px solid var(--border); border-radius:12px;
+    padding:10px 14px; background:#101827; color:#dbe8ff; font-weight:700; cursor:pointer;
+    transition:transform .12s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .btn.primary{ background:#1b2a44; border-color:#2f70ff55}
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(6,11,19,.4)}
+  .btn:active{ transform:translateY(0)}
+
+  .toast{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+    background:#0e1726; border:1px solid #3156ff55; color:#dbe8ff;
+    padding:10px 14px; border-radius:12px; box-shadow: var(--shadow); display:none;
+  }
+  .i{display:inline-flex; width:18px; height:18px}
+  .i svg{width:18px; height:18px; display:block}
+</style>
 </head>
 <body>
 
@@ -21,8 +230,7 @@
       <div class="search">
         <span class="icon i">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="11" cy="11" r="7" stroke-width="2"/>
-            <path d="M20 20l-3-3" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3-3" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </span>
         <input id="search" placeholder="Search for Roblox scripts..." />
@@ -42,7 +250,7 @@
   </div>
 
   <!-- Modal -->
-  <div id="modal" class="modal" role="dialog" aria-modal="true">
+  <div id="modal" class="modal">
     <div class="sheet">
       <div class="sheet-head">
         <div>
@@ -66,7 +274,6 @@
   <div id="toast" class="toast">Copied!</div>
 
 <script>
-  // helpers
   const $ = sel => document.querySelector(sel);
   const grid = $('#grid');
   const searchInput = $('#search');
@@ -85,9 +292,8 @@
 
   function clamp(str, n){ return str && str.length > n ? str.slice(0,n-1)+'…' : str; }
   function nfmt(n){ if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'K'; return n||0; }
-  function fmtDate(iso){ return new Date(iso).toLocaleDateString(); }
+  function fmtDate(iso){ try{return new Date(iso).toLocaleDateString();}catch{return '';} }
 
-  // Fetch homepage scripts
   async function fetchScripts(){
     const res = await fetch('https://scriptblox.com/api/script/fetch');
     const data = await res.json();
@@ -95,82 +301,75 @@
     render(ALL);
   }
 
-  // Search scripts
-  async function searchScripts(query){
-    const res = await fetch(`https://scriptblox.com/api/script/search?q=${encodeURIComponent(query)}`);
+  async function searchScripts(q){
+    const res = await fetch(`https://scriptblox.com/api/script/search?q=${encodeURIComponent(q)}`);
     const data = await res.json();
-    const list = data?.result?.scripts || [];
-    render(list);
+    render(data?.result?.scripts || []);
   }
 
-  // Render cards
   function render(list){
-    grid.innerHTML = '';
+    grid.innerHTML='';
     list.forEach(s=>{
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.innerHTML = `
-        ${s.isPatched ? `<span class="patched">Patched</span>`:''}
+      const el=document.createElement('div');
+      el.className='card';
+      el.innerHTML=`
+        ${s.isPatched?`<span class="patched">Patched</span>`:''}
         <div class="title">${clamp(s.title,56)}</div>
-        <div class="subtitle">${s?.game?.name || 'Universal'}</div>
-        <div class="desc">${clamp(s.description || 'No description',180)}</div>
+        <div class="subtitle">${s?.game?.name||'Universal'}</div>
+        <div class="desc">${clamp(s.description||'No description available.',180)}</div>
         <div class="stats">
           <span>${nfmt(s.views)} views</span>
           <span>${fmtDate(s.createdAt)}</span>
-        </div>
-      `;
-      el.onclick = ()=>openSheet(s);
+        </div>`;
+      el.onclick=()=>openSheet(s);
       grid.appendChild(el);
     });
   }
 
-  // Get full script code
   async function getScriptCode(s){
     if(s.script) return s.script;
     if(s.slug){
-      const r = await fetch(`https://scriptblox.com/api/script/details?slug=${s.slug}`);
-      const d = await r.json();
-      return d?.script?.script || d?.script?.content || null;
+      try{
+        const r=await fetch(`https://scriptblox.com/api/script/details?slug=${s.slug}`);
+        const d=await r.json();
+        return d?.script?.script || d?.script?.content || null;
+      }catch{}
     }
     return null;
   }
 
-  // Open modal
   async function openSheet(s){
-    mTitle.textContent = s.title;
-    mGame.textContent = s?.game?.name || 'Universal';
-    mPatched.style.display = s.isPatched?'inline-block':'none';
-    mDesc.textContent = s.description || '';
-    mCode.textContent = 'Loading script…';
-    openPage.href = `https://scriptblox.com/script/${s.slug}`;
+    mTitle.textContent=s.title||'Untitled';
+    mGame.textContent=s?.game?.name||'Universal';
+    mPatched.style.display=s.isPatched?'inline-block':'none';
+    mDesc.textContent=s.description||'';
+    mCode.textContent='Loading script…';
+    openPage.href=`https://scriptblox.com/script/${s.slug}`;
 
     modal.style.display='grid';
     document.body.style.overflow='hidden';
 
-    const code = await getScriptCode(s);
-    mCode.textContent = code || 'No script available';
-    copyBtn.onclick = ()=>navigator.clipboard.writeText(code||'').then(()=>showToast('Copied!'));
+    const code=await getScriptCode(s);
+    mCode.textContent=code||'No script available';
+    copyBtn.onclick=()=>{if(code)navigator.clipboard.writeText(code).then(()=>showToast('Copied!'));};
   }
 
-  function closeSheet(){ modal.style.display='none'; document.body.style.overflow=''; }
-  closeBtn.onclick = closeSheet;
-  modal.onclick = e=>{ if(e.target===modal) closeSheet(); };
+  function closeSheet(){modal.style.display='none';document.body.style.overflow='';}
+  closeBtn.onclick=closeSheet;
+  modal.onclick=e=>{if(e.target===modal)closeSheet();};
 
-  // Search handler
-  searchInput.oninput = e=>{
-    const q = e.target.value.trim();
-    if(!q) render(ALL);
-    else searchScripts(q);
+  searchInput.oninput=e=>{
+    const q=e.target.value.trim();
+    if(!q)render(ALL); else searchScripts(q);
   };
 
   function showToast(msg){
-    toast.textContent = msg;
-    toast.style.display = 'block';
+    toast.textContent=msg;
+    toast.style.display='block';
     clearTimeout(showToast.t);
     showToast.t=setTimeout(()=>toast.style.display='none',1400);
   }
 
-  // Init
   fetchScripts();
 </script>
 </body>
