@@ -1,213 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ScriptBlox Styled UI</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
-    }
-    header {
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      background: linear-gradient(90deg, #4facfe, #00f2fe);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 2.2rem;
-    }
-    #search {
-      padding: 10px 15px;
-      width: 60%;
-      max-width: 500px;
-      border: none;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-size: 1rem;
-    }
-    main {
-      max-width: 1200px;
-      margin: 20px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 0 20px;
-    }
-    .card {
-      background: #1a1a1a;
-      border-radius: 20px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-    }
-    .card h2 {
-      margin: 0;
-      font-size: 1.3rem;
-      color: #fff;
-    }
-    .card p {
-      margin: 6px 0;
-      font-size: 0.9rem;
-      color: #bbb;
-    }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      color: #fff;
-      margin-top: 8px;
-    }
-    .stats {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: #999;
-    }
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .modal-content {
-      background: #1e1e1e;
-      border-radius: 16px;
-      padding: 20px;
-      max-width: 600px;
-      width: 90%;
-      color: #fff;
-      animation: pop 0.3s ease;
-    }
-    @keyframes pop {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .close-btn {
-      float: right;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    pre {
-      background: #111;
-      padding: 12px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      margin-top: 15px;
-    }
-    button.copy-btn {
-      margin-top: 10px;
-      background: #4facfe;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #000;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RoScript Browser</title>
+<style>
+  :root{
+    --bg: #0c1117;
+    --panel:#121821;
+    --card:#141b24;
+    --card-2:#111823;
+    --border:#263041;
+    --muted:#8b94a7;
+    --text:#e7edf5;
+    --primary:#3b82f6;   /* blue accent */
+    --good:#22c55e;
+    --bad:#ef4444;
+    --chip:#1a2433;
+    --ring:#3b82f6;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+
+  /* base */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 500px at 50% -50%, #101726 0%, #0b111a 60%, var(--bg) 100%);
+    color:var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* header */
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter: blur(8px);
+    background:linear-gradient(180deg, rgba(16,23,35,.82), rgba(16,23,35,.6)) ;
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1280px;
+    margin:0 auto;
+    padding:14px 20px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px;
+  }
+  .logo{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg,#ff9966,#ff5e62);
+    display:grid; place-items:center;
+    color:#091116; font-weight:800;
+    border:1px solid #ffb19966;
+    box-shadow:0 4px 14px rgba(255,105,85,.3);
+  }
+  .brand span{opacity:.95}
+
+  .search{
+    margin-left:auto; position:relative; flex:0 1 540px;
+  }
+  .search input{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:12px 44px 12px 44px;
+    border-radius:14px;
+    outline:none;
+    transition:border .2s ease, box-shadow .2s ease;
+  }
+  .search input:focus{
+    border-color:#3b82f699;
+    box-shadow:0 0 0 4px rgba(59,130,246,.15);
+  }
+  .search .icon{
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    opacity:.7;
+  }
+
+  /* hero */
+  .hero{
+    max-width:980px; margin:42px auto 10px; text-align:center; padding:0 16px;
+  }
+  .hero h1{
+    margin:0 0 8px;
+    font-size:42px; line-height:1.15; letter-spacing:.3px;
+    text-shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+  .hero p{margin:0; color:var(--muted)}
+
+  /* grid */
+  .wrap{max-width:1280px; margin:26px auto 80px; padding:0 16px;}
+  .grid{
+    display:grid; gap:22px;
+    grid-template-columns:repeat(12, 1fr);
+  }
+  /* 4 columns desktop, 2/1 on smaller */
+  @media (min-width:1150px){ .card{grid-column: span 3;} }
+  @media (min-width:780px) and (max-width:1149px){ .card{grid-column: span 4;} }
+  @media (max-width:779px){ .card{grid-column: span 12;} }
+
+  /* card */
+  .card{
+    background:linear-gradient(180deg,var(--card), var(--card-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    min-height:245px; /* bigger cards per your request */
+    box-shadow: var(--shadow);
+    position:relative;
+    display:flex; flex-direction:column; gap:10px;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    cursor:pointer; overflow:hidden;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:#3b82f633;
+    box-shadow:0 20px 40px rgba(6,11,19,.65), 0 0 0 1px rgba(59,130,246,.06) inset;
+  }
+  .patched{
+    position:absolute; top:12px; right:12px;
+    background:linear-gradient(180deg, #ff5a6d, #ef4444);
+    color:white; font-size:.75rem; font-weight:700;
+    padding:5px 9px; border-radius:999px;
+    border:1px solid #ff8ea266;
+    box-shadow:0 6px 16px rgba(239,68,68,.35);
+  }
+
+  .title{font-size:18px; font-weight:750; margin-right:80px}
+  .subtitle{color:var(--muted); font-size:.92rem}
+
+  .desc{
+    font-size:.93rem; color:#cbd5e1; line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    margin-top:2px;
+  }
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+  .chip{
+    background:var(--chip);
+    border:1px solid var(--border);
+    color:#c7d1e5;
+    padding:5px 10px;
+    border-radius:999px; font-size:.78rem; white-space:nowrap;
+  }
+
+  .stats{
+    margin-top:auto; padding-top:12px;
+    display:flex; gap:12px; flex-wrap:wrap;
+    border-top:1px dashed #263449;
+  }
+  .pill{
+    display:flex; align-items:center; gap:8px;
+    background:#0f1622; border:1px solid var(--border);
+    padding:7px 12px; border-radius:999px; color:#c0cada; font-size:.85rem;
+  }
+  .pill .i{opacity:.8}
+
+  /* modal */
+  .modal{
+    position:fixed; inset:0; display:none; place-items:center; z-index:50;
+    background:rgba(4,10,18,.65); backdrop-filter: blur(6px);
+    padding:20px;
+  }
+  .sheet{
+    width:min(920px, 95vw);
+    background:linear-gradient(180deg, #121a26, #0f1621);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 40px 120px rgba(0,0,0,.6);
+    overflow:hidden;
+    transform-origin: 50% 42%;
+    animation:sheetIn .26s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes sheetIn{
+    from{opacity:0; transform: translateY(10px) scale(.96)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .sheet-head{
+    padding:18px 20px;
+    display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border);
+  }
+  .sheet-title{font-size:20px; font-weight:800; letter-spacing:.2px}
+  .sheet-game{color:var(--muted)}
+  .sheet-close{
+    margin-left:auto; width:36px; height:36px; display:grid; place-items:center;
+    border-radius:12px; border:1px solid var(--border); background:#0f1621; color:#cbd5e1;
+    cursor:pointer; transition:transform .1s ease, background .15s ease, border-color .15s ease;
+  }
+  .sheet-close:hover{transform:translateY(-2px); border-color:#3b82f655; background:#141d2a}
+
+  .sheet-body{padding:16px 20px 20px; display:grid; gap:16px}
+  .sheet-desc{color:#cad5e7}
+  .code{
+    background:#0a1018; border:1px solid #1f2a3a; color:#e7edf5; border-radius:14px; padding:14px;
+    max-height:380px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,"Liberation Mono","Courier New", monospace;
+    font-size:.9rem; line-height:1.45;
+  }
+  .actions{display:flex; gap:10px; justify-content:flex-end}
+  .btn{
+    border:1px solid var(--border); border-radius:12px;
+    padding:10px 14px; background:#101827; color:#dbe8ff; font-weight:700; cursor:pointer;
+    transition:transform .12s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .btn.primary{ background:#1b2a44; border-color:#2f70ff55}
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(6,11,19,.4)}
+  .btn:active{ transform:translateY(0)}
+
+  .toast{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+    background:#0e1726; border:1px solid #3156ff55; color:#dbe8ff;
+    padding:10px 14px; border-radius:12px; box-shadow: var(--shadow); display:none;
+  }
+  /* icons */
+  .i{display:inline-flex; width:18px; height:18px}
+  .i svg{width:18px; height:18px; display:block}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Script Explorer</h1>
-    <input type="text" id="search" placeholder="Search scripts...">
-  </header>
-  <main id="cards"></main>
 
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p id="modal-game"></p>
-      <span id="modal-status" class="badge"></span>
-      <pre id="modal-code"></pre>
-      <button class="copy-btn" onclick="copyCode()">Copy Script</button>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">R</div>
+        <span>RoScript</span>
+      </div>
+      <div class="search">
+        <span class="icon i" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3-3" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <input id="search" placeholder="Search for Roblox scripts..." />
+      </div>
     </div>
   </div>
 
-  <script>
-    const cardsContainer = document.getElementById('cards');
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalGame = document.getElementById('modal-game');
-    const modalStatus = document.getElementById('modal-status');
-    const modalCode = document.getElementById('modal-code');
+  <!-- Hero -->
+  <div class="hero">
+    <h1>RoScript Browser</h1>
+    <p>Discover and download the best Roblox scripts from ScriptBlox. Find working scripts with a clean, modern interface.</p>
+  </div>
 
-    let allScripts = [];
+  <!-- Grid -->
+  <div class="wrap">
+    <div id="grid" class="grid"></div>
+  </div>
 
-    async function fetchScripts() {
-      try {
-        const res = await fetch("https://scriptblox.com/api/script/fetch");
-        const data = await res.json();
-        allScripts = data.result.scripts;
-        displayScripts(allScripts);
-      } catch (err) {
-        console.error("Error fetching scripts", err);
-      }
-    }
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="sheet" role="document">
+      <div class="sheet-head">
+        <div>
+          <div class="sheet-title" id="mTitle">Title</div>
+          <div class="sheet-game" id="mGame">Game name</div>
+        </div>
+        <span id="mPatched" class="patched" style="display:none">Patched</span>
+        <button id="close" class="sheet-close" aria-label="Close">
+          <span class="i">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M6 6l12 12M18 6l-12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div id="mDesc" class="sheet-desc"></div>
+        <pre id="mCode" class="code">Loading script…</pre>
+        <div class="actions">
+          <button id="copy" class="btn primary">
+            <span class="i" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="9" y="9" width="13" height="13" rx="2" stroke-width="2"/>
+                <rect x="2" y="2" width="13" height="13" rx="2" stroke-width="2"/>
+              </svg>
+            </span>
+            Copy Script
+          </button>
+          <a id="openPage" class="btn" href="#" target="_blank" rel="noopener">Open on ScriptBlox</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function displayScripts(scripts) {
-      cardsContainer.innerHTML = "";
-      scripts.forEach(script => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h2>${script.title}</h2>
-          <p>${script.game && script.game.name ? script.game.name : "Unknown Game"}</p>
-          <span class="badge">${script.isPatched ? "Patched" : "Working"}</span>
-          <div class="stats">👍 ${script.likes} | 👎 ${script.dislikes} | 👁 ${script.views}</div>
-        `;
-        card.onclick = () => openModal(script);
-        cardsContainer.appendChild(card);
-      });
-    }
+  <div id="toast" class="toast">Copied!</div>
 
-    function openModal(script) {
-      modal.style.display = "flex";
-      modalTitle.textContent = script.title;
-      modalGame.textContent = script.game && script.game.name ? script.game.name : "Unknown Game";
-      modalStatus.textContent = script.isPatched ? "Patched" : "Working";
-      modalCode.textContent = script.script || "No script provided.";
-    }
+<script>
+  // ---------- helpers ----------
+  const $ = sel => document.querySelector(sel);
+  const grid = $('#grid');
+  const searchInput = $('#search');
+  const modal = $('#modal');
+  const mTitle = $('#mTitle');
+  const mGame = $('#mGame');
+  const mPatched = $('#mPatched');
+  const mDesc = $('#mDesc');
+  const mCode = $('#mCode');
+  const copyBtn = $('#copy');
+  const openPage = $('#openPage');
+  const closeBtn = $('#close');
+  const toast = $('#toast');
 
-    function closeModal() {
-      modal.style.display = "none";
-    }
+  let ALL = []; // cache of scripts
+  function clamp(str, n){
+    if(!str) return '';
+    return str.length > n ? str.slice(0, n - 1) + '…' : str;
+  }
+  function nfmt(n){
+    if(!n && n !== 0) return '0';
+    if(n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+    if(n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
+    return String(n);
+  }
+  function fmtDate(iso){
+    try{ return new Date(iso).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}catch{ return '';}
+  }
+  function pill(iconSvg, text){
+    return `
+      <div class="pill">
+        <span class="i">${iconSvg}</span>
+        <span>${text}</span>
+      </div>`;
+  }
+  const eyeSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke-width="2"/></svg>`;
+  const heartSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" stroke-width="2" stroke-linejoin="round"/></svg>`;
+  const calSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2" stroke-width="2"/><path d="M16 3v4M8 3v4M3 11h18" stroke-width="2" stroke-linecap="round"/></svg>`;
 
-    function copyCode() {
-      navigator.clipboard.writeText(modalCode.textContent);
-      alert("Copied to clipboard!");
-    }
+  // ---------- fetch & render ----------
+  async function fetchScripts(){
+    // ScriptBlox: 20 most recent
+    const res = await fetch('https://scriptblox.com/api/script/fetch');
+    const data = await res.json();
+    ALL = (data?.result?.scripts) || [];
+    render(ALL);
+  }
 
-    // Search
-    document.getElementById('search').addEventListener('input', e => {
-      const q = e.target.value.toLowerCase();
-      const filtered = allScripts.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        (s.game && s.game.name && s.game.name.toLowerCase().includes(q))
-      );
-      displayScripts(filtered);
+  function render(list){
+    grid.innerHTML = '';
+    list.forEach(s => {
+      const gameName = s?.game?.name || s?.game || 'Universal';
+      const tags = [];
+      if (gameName) tags.push(gameName);
+      (s?.keywords || []).slice(0,2).forEach(k => tags.push(k));
+
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        ${s.isPatched ? `<span class="patched">Patched</span>` : ``}
+        <div class="title">${clamp(s.title || 'Untitled Script', 56)}</div>
+        <div class="subtitle">${gameName}</div>
+        <div class="desc">${clamp(s.description || 'No description available.', 220)}</div>
+
+        <div class="chips">
+          ${tags.slice(0,3).map(t=>`<span class="chip">${t}</span>`).join('')}
+        </div>
+
+        <div class="stats">
+          ${pill(eyeSVG, nfmt(s.views || 0))}
+          ${pill(heartSVG, nfmt(s.likes || 0))}
+          ${pill(calSVG, fmtDate(s.createdAt || s.updatedAt))}
+        </div>
+      `;
+      el.addEventListener('click', () => openSheet(s));
+      grid.appendChild(el);
     });
+  }
 
-    fetchScripts();
-  </script>
+  // Try to obtain script code (the /fetch payload sometimes does not include it)
+  async function getScriptCode(s){
+    // 1) present property
+    if (s.script || s.scriptText || s.content) return s.script || s.scriptText || s.content;
+
+    // 2) try by slug (common)
+    if (s.slug){
+      try{
+        const r = await fetch(`https://scriptblox.com/api/script/details?slug=${encodeURIComponent(s.slug)}`);
+        const d = await r.json();
+        const code = d?.result?.script || d?.result?.scriptText || d?.script;
+        if (code) return code;
+      }catch(_){}
+    }
+    // 3) try by id as a fallback (some deployments)
+    if (s._id){
+      try{
+        const r = await fetch(`https://scriptblox.com/api/script/details/${encodeURIComponent(s._id)}`);
+        const d = await r.json();
+        const code = d?.result?.script || d?.script;
+        if (code) return code;
+      }catch(_){}
+    }
+    // 4) give up
+    return null;
+  }
+
+  async function openSheet(s){
+    mTitle.textContent = s.title || 'Untitled Script';
+    mGame.textContent = s?.game?.name || s?.game || 'Universal';
+    mPatched.style.display = s.isPatched ? 'inline-block' : 'none';
+    mDesc.textContent = s.description || 'No description available.';
+    mCode.textContent = 'Loading script…';
+    openPage.href = s.slug ? `https://scriptblox.com/script/${encodeURIComponent(s.slug)}` : 'https://scriptblox.com/';
+
+    modal.style.display = 'grid';
+    document.body.style.overflow = 'hidden';
+
+    const code = await getScriptCode(s);
+    mCode.textContent = code || 'No script content available. Open on ScriptBlox to view.';
+    copyBtn.onclick = () => {
+      if (!code){ showToast('No script to copy'); return; }
+      navigator.clipboard.writeText(code).then(()=>showToast('Copied!'));
+    };
+  }
+
+  function closeSheet(){
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  closeBtn.addEventListener('click', closeSheet);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeSheet(); });
+
+  // search
+  searchInput.addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    if(!q) { render(ALL); return; }
+    const filtered = ALL.filter(s =>
+      (s.title || '').toLowerCase().includes(q) ||
+      (s?.game?.name || s?.game || '').toLowerCase().includes(q) ||
+      (s.description || '').toLowerCase().includes(q)
+    );
+    render(filtered);
+  });
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    clearTimeout(showToast.t);
+    showToast.t = setTimeout(()=> toast.style.display='none', 1400);
+  }
+
+  // init
+  fetchScripts().catch(err=>{
+    console.error(err);
+    grid.innerHTML = `<div style="grid-column:1/-1; padding:18px; background:#121a26; border:1px solid var(--border); border-radius:14px;">Failed to load scripts. Check CORS or try again later.</div>`;
+  });
+</script>
 </body>
 </html>
