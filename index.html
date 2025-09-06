@@ -3,323 +3,210 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ScriptBlox UI</title>
+  <title>ScriptBlox Styled UI</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
       margin: 0;
-      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f0f0f;
+      color: #f0f0f0;
     }
     header {
-      padding: 20px;
       text-align: center;
-      background: #222;
-      font-size: 20px;
-      font-weight: bold;
+      padding: 20px;
+    }
+    h1 {
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.2rem;
     }
     #search {
-      margin: 15px auto;
-      display: block;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 10px 15px;
+      width: 60%;
+      max-width: 500px;
       border: none;
-      width: 90%;
-      max-width: 400px;
-      font-size: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 1rem;
     }
-    #grid {
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-      padding: 20px;
+      gap: 20px;
+      padding: 0 20px;
     }
     .card {
-      background: #1c1c1c;
-      border-radius: 12px;
-      padding: 16px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      position: relative;
+      background: #1a1a1a;
+      border-radius: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
     }
     .card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.8);
     }
-    .title {
-      font-weight: bold;
-      font-size: 16px;
+    .card h2 {
+      margin: 0;
+      font-size: 1.3rem;
       color: #fff;
     }
-    .subtitle {
-      font-size: 13px;
-      color: #aaa;
-    }
-    .desc {
-      font-size: 14px;
-      color: #ddd;
-      flex-grow: 1;
-    }
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .chip {
-      background: #333;
+    .card p {
+      margin: 6px 0;
+      font-size: 0.9rem;
       color: #bbb;
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      background: linear-gradient(90deg, #ff416c, #ff4b2b);
+      color: #fff;
+      margin-top: 8px;
     }
     .stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
       color: #999;
     }
-    .patched {
-      background: #b33;
-      color: white;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 6px;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
     /* Modal */
-    #modal {
-      display: none;
+    .modal {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      place-items: center;
-      z-index: 1000;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
     }
-    #modalContent {
-      background: #1c1c1c;
-      border-radius: 14px;
+    .modal-content {
+      background: #1e1e1e;
+      border-radius: 16px;
       padding: 20px;
       max-width: 600px;
       width: 90%;
-      max-height: 80%;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    #modalContent pre {
-      background: #000;
-      padding: 12px;
-      border-radius: 8px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      color: #0f0;
-      font-size: 13px;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    #close {
-      cursor: pointer;
-      font-size: 18px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: #333;
-    }
-    #copy {
-      cursor: pointer;
-      padding: 6px 12px;
-      border: none;
-      background: #444;
-      border-radius: 6px;
-      color: white;
-      font-size: 13px;
-    }
-    #openPage {
-      font-size: 13px;
-      color: #4af;
-    }
-    #toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #222;
       color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      display: none;
-      font-size: 14px;
-      z-index: 2000;
+      animation: pop 0.3s ease;
+    }
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .close-btn {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    pre {
+      background: #111;
+      padding: 12px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-top: 15px;
+    }
+    button.copy-btn {
+      margin-top: 10px;
+      background: #4facfe;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>ScriptBlox Scripts</header>
-  <input type="text" id="search" placeholder="Search scripts..."/>
-  <div id="grid"></div>
+  <header>
+    <h1>Script Explorer</h1>
+    <input type="text" id="search" placeholder="Search scripts...">
+  </header>
+  <main id="cards"></main>
 
-  <!-- Modal -->
-  <div id="modal">
-    <div id="modalContent">
-      <div class="modal-header">
-        <h2 id="mTitle">Title</h2>
-        <span id="close">✕</span>
-      </div>
-      <div id="mGame"></div>
-      <span id="mPatched" class="patched" style="display:none;">Patched</span>
-      <p id="mDesc"></p>
-      <pre id="mCode">Loading script...</pre>
-      <button id="copy">Copy Script</button>
-      <a id="openPage" href="#" target="_blank">View on ScriptBlox</a>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-game"></p>
+      <span id="modal-status" class="badge"></span>
+      <pre id="modal-code"></pre>
+      <button class="copy-btn" onclick="copyCode()">Copy Script</button>
     </div>
   </div>
 
-  <div id="toast"></div>
-
   <script>
-    const grid = document.getElementById("grid");
-    const searchInput = document.getElementById("search");
-    const modal = document.getElementById("modal");
-    const mTitle = document.getElementById("mTitle");
-    const mGame = document.getElementById("mGame");
-    const mPatched = document.getElementById("mPatched");
-    const mDesc = document.getElementById("mDesc");
-    const mCode = document.getElementById("mCode");
-    const copyBtn = document.getElementById("copy");
-    const openPage = document.getElementById("openPage");
-    const closeBtn = document.getElementById("close");
-    const toast = document.getElementById("toast");
+    const cardsContainer = document.getElementById('cards');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalGame = document.getElementById('modal-game');
+    const modalStatus = document.getElementById('modal-status');
+    const modalCode = document.getElementById('modal-code');
 
-    let ALL = [];
-    let currentCode = "";
+    let allScripts = [];
 
-    function clamp(str, n) {
-      return str && str.length > n ? str.slice(0, n - 1) + "…" : str;
-    }
-    function nfmt(n) {
-      if (!n && n !== 0) return "0";
-      if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
-      if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
-      return String(n);
-    }
-    function fmtDate(iso) {
+    async function fetchScripts() {
       try {
-        return new Date(iso).toLocaleDateString(undefined, {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        });
-      } catch (e) {
-        return "";
-      }
-    }
-
-    async function fetchScripts(url = "https://scriptblox.com/api/script/fetch") {
-      try {
-        const res = await fetch(url);
-        const json = await res.json();
-        ALL = json?.result?.scripts || [];
-        render(ALL);
+        const res = await fetch("https://scriptblox.com/api/script/fetch");
+        const data = await res.json();
+        allScripts = data.result.scripts;
+        displayScripts(allScripts);
       } catch (err) {
-        console.error("Fetch failed:", err);
-        grid.innerHTML = `<div style="color:red;padding:20px;">Failed to load scripts.</div>`;
+        console.error("Error fetching scripts", err);
       }
     }
 
-    function render(list) {
-      grid.innerHTML = "";
-      list.forEach(s => {
-        const el = document.createElement("div");
-        el.className = "card";
-        el.innerHTML = `
-          ${s.isPatched ? `<span class="patched">Patched</span>` : ""}
-          <div class="title">${clamp(s.title, 56)}</div>
-          <div class="subtitle">${s?.game?.name || s?.game || "Universal"}</div>
-          <div class="desc">${clamp(s.description || "No description.", 160)}</div>
-          <div class="chips">${(s.keywords || []).slice(0, 3).map(t => `<span class="chip">${t}</span>`).join("")}</div>
-          <div class="stats">
-            <div>👁 ${nfmt(s.views || 0)}</div>
-            <div>❤ ${nfmt(s.likes || 0)}</div>
-            <div>📅 ${fmtDate(s.createdAt || s.updatedAt)}</div>
-          </div>
+    function displayScripts(scripts) {
+      cardsContainer.innerHTML = "";
+      scripts.forEach(script => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h2>${script.title}</h2>
+          <p>${script.game && script.game.name ? script.game.name : "Unknown Game"}</p>
+          <span class="badge">${script.isPatched ? "Patched" : "Working"}</span>
+          <div class="stats">👍 ${script.likes} | 👎 ${script.dislikes} | 👁 ${script.views}</div>
         `;
-        el.addEventListener("click", () => openSheet(s));
-        grid.appendChild(el);
+        card.onclick = () => openModal(script);
+        cardsContainer.appendChild(card);
       });
     }
 
-    async function openSheet(s) {
-      mTitle.textContent = s.title || "Untitled";
-      mGame.textContent = s?.game?.name || s?.game || "Universal";
-      mPatched.style.display = s.isPatched ? "inline-block" : "none";
-      mDesc.textContent = s.description || "";
-      mCode.textContent = "Loading script…";
-      openPage.href = s.slug ? `https://scriptblox.com/script/${encodeURIComponent(s.slug)}` : "#";
-      modal.style.display = "grid";
-      document.body.style.overflow = "hidden";
-      const code = await getScriptCode(s);
-      currentCode = code || "";
-      mCode.textContent = code || "Script not available here.";
+    function openModal(script) {
+      modal.style.display = "flex";
+      modalTitle.textContent = script.title;
+      modalGame.textContent = script.game && script.game.name ? script.game.name : "Unknown Game";
+      modalStatus.textContent = script.isPatched ? "Patched" : "Working";
+      modalCode.textContent = script.script || "No script provided.";
     }
 
-    async function getScriptCode(s) {
-      if (s.script) return s.script;
-      if (s.slug) {
-        try {
-          const res = await fetch(`https://scriptblox.com/api/script/details?slug=${encodeURIComponent(s.slug)}`);
-          const j = await res.json();
-          return j?.result?.script || null;
-        } catch (e) { console.warn("Detail fetch failed", e); }
-      }
-      return null;
-    }
-
-    function closeSheet() {
+    function closeModal() {
       modal.style.display = "none";
-      document.body.style.overflow = "";
-    }
-    closeBtn.addEventListener("click", closeSheet);
-    modal.addEventListener("click", e => { if (e.target === modal) closeSheet(); });
-
-    copyBtn.addEventListener("click", () => {
-      if (!currentCode) return;
-      navigator.clipboard.writeText(currentCode)
-        .then(() => showToast("Copied!"))
-        .catch(() => showToast("Copy failed"));
-    });
-
-    searchInput.addEventListener("input", e => {
-      const q = e.target.value.trim().toLowerCase();
-      if (!q) {
-        render(ALL);
-      } else {
-        const filtered = ALL.filter(s =>
-          (s.title || "").toLowerCase().includes(q) ||
-          (s.game?.name || s.game || "").toLowerCase().includes(q) ||
-          (s.description || "").toLowerCase().includes(q)
-        );
-        render(filtered);
-      }
-    });
-
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.style.display = "block";
-      clearTimeout(showToast._h);
-      showToast._h = setTimeout(() => toast.style.display = "none", 1400);
     }
 
-    // Start
+    function copyCode() {
+      navigator.clipboard.writeText(modalCode.textContent);
+      alert("Copied to clipboard!");
+    }
+
+    // Search
+    document.getElementById('search').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      const filtered = allScripts.filter(s =>
+        s.title.toLowerCase().includes(q) ||
+        (s.game && s.game.name && s.game.name.toLowerCase().includes(q))
+      );
+      displayScripts(filtered);
+    });
+
     fetchScripts();
   </script>
 </body>
