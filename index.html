@@ -1,451 +1,1553 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RoScript Browser</title>
-<style>
-  :root{
-    --bg: #0c1117;
-    --panel:#121821;
-    --card:#141b24;
-    --card-2:#111823;
-    --border:#263041;
-    --muted:#8b94a7;
-    --text:#e7edf5;
-    --primary:#3b82f6;   /* blue accent */
-    --good:#22c55e;
-    --bad:#ef4444;
-    --chip:#1a2433;
-    --ring:#3b82f6;
-    --shadow:0 10px 30px rgba(0,0,0,.35);
-    --radius:18px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KozyScript Browser - Best Roblox Scripts from ScriptBlox</title>
+    <meta name="description" content="Browse and download the best Roblox scripts from ScriptBlox. Find working scripts for Arsenal, Blox Fruits, Da Hood, Phantom Forces and more games.">
+    <meta name="author" content="KozyScript Browser">
+    
+    <meta property="og:title" content="KozyScript Browser - Best Roblox Scripts">
+    <meta property="og:description" content="Browse and download the best Roblox scripts from ScriptBlox with our clean, modern interface.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@lovable_dev">
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png">
+    
+    <style>
+        /* CSS Reset and Gaming Design System */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* base */
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    background: radial-gradient(1200px 500px at 50% -50%, #101726 0%, #0b111a 60%, var(--bg) 100%);
-    color:var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-  }
+        :root {
+            /* Dark gaming theme */
+            --background: hsl(215, 28%, 9%);
+            --foreground: hsl(213, 31%, 91%);
+            --card: hsl(215, 25%, 12%);
+            --card-foreground: hsl(213, 31%, 91%);
+            --primary: hsl(213, 94%, 68%);
+            --primary-foreground: hsl(215, 28%, 9%);
+            --secondary: hsl(25, 95%, 60%);
+            --secondary-foreground: hsl(215, 28%, 9%);
+            --muted: hsl(215, 25%, 16%);
+            --muted-foreground: hsl(213, 19%, 65%);
+            --accent: hsl(213, 94%, 68%);
+            --border: hsl(215, 25%, 20%);
+            --success: hsl(142, 71%, 45%);
+            --destructive: hsl(0, 84%, 60%);
+            --gradient-primary: linear-gradient(135deg, hsl(213, 94%, 68%), hsl(25, 95%, 60%));
+            --gradient-hero: linear-gradient(135deg, hsl(215, 28%, 9%) 0%, hsl(215, 25%, 12%) 50%, hsl(215, 28%, 9%) 100%);
+            --shadow-glow: 0 0 30px hsl(213, 94%, 68%, 0.3);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-  /* header */
-  .topbar{
-    position:sticky; top:0; z-index:30;
-    backdrop-filter: blur(8px);
-    background:linear-gradient(180deg, rgba(16,23,35,.82), rgba(16,23,35,.6)) ;
-    border-bottom:1px solid var(--border);
-  }
-  .topbar-inner{
-    max-width:1280px;
-    margin:0 auto;
-    padding:14px 20px;
-    display:flex; align-items:center; gap:14px;
-  }
-  .brand{
-    display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px;
-  }
-  .logo{
-    width:34px; height:34px; border-radius:10px;
-    background:linear-gradient(135deg,#ff9966,#ff5e62);
-    display:grid; place-items:center;
-    color:#091116; font-weight:800;
-    border:1px solid #ffb19966;
-    box-shadow:0 4px 14px rgba(255,105,85,.3);
-  }
-  .brand span{opacity:.95}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gradient-hero);
+            color: var(--foreground);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-  .search{
-    margin-left:auto; position:relative; flex:0 1 540px;
-  }
-  .search input{
-    width:100%;
-    background:var(--panel);
-    border:1px solid var(--border);
-    color:var(--text);
-    padding:12px 44px 12px 44px;
-    border-radius:14px;
-    outline:none;
-    transition:border .2s ease, box-shadow .2s ease;
-  }
-  .search input:focus{
-    border-color:#3b82f699;
-    box-shadow:0 0 0 4px rgba(59,130,246,.15);
-  }
-  .search .icon{
-    position:absolute; left:14px; top:50%; transform:translateY(-50%);
-    opacity:.7;
-  }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--muted);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: hsl(213, 94%, 68%, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
 
-  /* hero */
-  .hero{
-    max-width:980px; margin:42px auto 10px; text-align:center; padding:0 16px;
-  }
-  .hero h1{
-    margin:0 0 8px;
-    font-size:42px; line-height:1.15; letter-spacing:.3px;
-    text-shadow:0 10px 40px rgba(0,0,0,.35);
-  }
-  .hero p{margin:0; color:var(--muted)}
+        /* Header */
+        .header {
+            border-bottom: 1px solid hsl(215, 25%, 20%, 0.5);
+            background: hsl(215, 25%, 12%, 0.5);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
 
-  /* grid */
-  .wrap{max-width:1280px; margin:26px auto 80px; padding:0 16px;}
-  .grid{
-    display:grid; gap:22px;
-    grid-template-columns:repeat(12, 1fr);
-  }
-  /* 4 columns desktop, 2/1 on smaller */
-  @media (min-width:1150px){ .card{grid-column: span 3;} }
-  @media (min-width:780px) and (max-width:1149px){ .card{grid-column: span 4;} }
-  @media (max-width:779px){ .card{grid-column: span 12;} }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-  /* card */
-  .card{
-    background:linear-gradient(180deg,var(--card), var(--card-2));
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:18px 18px 14px;
-    min-height:245px; /* bigger cards per your request */
-    box-shadow: var(--shadow);
-    position:relative;
-    display:flex; flex-direction:column; gap:10px;
-    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
-    cursor:pointer; overflow:hidden;
-  }
-  .card:hover{
-    transform:translateY(-6px);
-    border-color:#3b82f633;
-    box-shadow:0 20px 40px rgba(6,11,19,.65), 0 0 0 1px rgba(59,130,246,.06) inset;
-  }
-  .patched{
-    position:absolute; top:12px; right:12px;
-    background:linear-gradient(180deg, #ff5a6d, #ef4444);
-    color:white; font-size:.75rem; font-weight:700;
-    padding:5px 9px; border-radius:999px;
-    border:1px solid #ff8ea266;
-    box-shadow:0 6px 16px rgba(239,68,68,.35);
-  }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-  .title{font-size:18px; font-weight:750; margin-right:80px}
-  .subtitle{color:var(--muted); font-size:.92rem}
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-foreground);
+            filter: drop-shadow(0 0 8px hsl(213, 94%, 68%, 0.3));
+        }
 
-  .desc{
-    font-size:.93rem; color:#cbd5e1; line-height:1.45;
-    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
-    margin-top:2px;
-  }
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: bold;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
-  .chip{
-    background:var(--chip);
-    border:1px solid var(--border);
-    color:#c7d1e5;
-    padding:5px 10px;
-    border-radius:999px; font-size:.78rem; white-space:nowrap;
-  }
+        .logo-text p {
+            font-size: 12px;
+            color: var(--muted-foreground);
+        }
 
-  .stats{
-    margin-top:auto; padding-top:12px;
-    display:flex; gap:12px; flex-wrap:wrap;
-    border-top:1px dashed #263449;
-  }
-  .pill{
-    display:flex; align-items:center; gap:8px;
-    background:#0f1622; border:1px solid var(--border);
-    padding:7px 12px; border-radius:999px; color:#c0cada; font-size:.85rem;
-  }
-  .pill .i{opacity:.8}
+        .search-form {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
 
-  /* modal */
-  .modal{
-    position:fixed; inset:0; display:none; place-items:center; z-index:50;
-    background:rgba(4,10,18,.65); backdrop-filter: blur(6px);
-    padding:20px;
-  }
-  .sheet{
-    width:min(920px, 95vw);
-    background:linear-gradient(180deg, #121a26, #0f1621);
-    border:1px solid var(--border);
-    border-radius:20px;
-    box-shadow:0 40px 120px rgba(0,0,0,.6);
-    overflow:hidden;
-    transform-origin: 50% 42%;
-    animation:sheetIn .26s cubic-bezier(.2,.7,.2,1);
-  }
-  @keyframes sheetIn{
-    from{opacity:0; transform: translateY(10px) scale(.96)}
-    to{opacity:1; transform: translateY(0) scale(1)}
-  }
-  .sheet-head{
-    padding:18px 20px;
-    display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border);
-  }
-  .sheet-title{font-size:20px; font-weight:800; letter-spacing:.2px}
-  .sheet-game{color:var(--muted)}
-  .sheet-close{
-    margin-left:auto; width:36px; height:36px; display:grid; place-items:center;
-    border-radius:12px; border:1px solid var(--border); background:#0f1621; color:#cbd5e1;
-    cursor:pointer; transition:transform .1s ease, background .15s ease, border-color .15s ease;
-  }
-  .sheet-close:hover{transform:translateY(-2px); border-color:#3b82f655; background:#141d2a}
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: hsl(215, 25%, 16%, 0.5);
+            border: 1px solid hsl(215, 25%, 20%, 0.5);
+            border-radius: 8px;
+            color: var(--foreground);
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
 
-  .sheet-body{padding:16px 20px 20px; display:grid; gap:16px}
-  .sheet-desc{color:#cad5e7}
-  .code{
-    background:#0a1018; border:1px solid #1f2a3a; color:#e7edf5; border-radius:14px; padding:14px;
-    max-height:380px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,"Liberation Mono","Courier New", monospace;
-    font-size:.9rem; line-height:1.45;
-  }
-  .actions{display:flex; gap:10px; justify-content:flex-end}
-  .btn{
-    border:1px solid var(--border); border-radius:12px;
-    padding:10px 14px; background:#101827; color:#dbe8ff; font-weight:700; cursor:pointer;
-    transition:transform .12s ease, box-shadow .15s ease, border-color .15s ease;
-  }
-  .btn.primary{ background:#1b2a44; border-color:#2f70ff55}
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(6,11,19,.4)}
-  .btn:active{ transform:translateY(0)}
+        .search-input:focus {
+            outline: none;
+            border-color: hsl(213, 94%, 68%, 0.5);
+            box-shadow: 0 0 0 3px hsl(213, 94%, 68%, 0.2);
+        }
 
-  .toast{
-    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-    background:#0e1726; border:1px solid #3156ff55; color:#dbe8ff;
-    padding:10px 14px; border-radius:12px; box-shadow: var(--shadow); display:none;
-  }
-  /* icons */
-  .i{display:inline-flex; width:18px; height:18px}
-  .i svg{width:18px; height:18px; display:block}
-</style>
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--muted-foreground);
+        }
+
+        .refresh-btn {
+            padding: 8px;
+            background: hsl(215, 25%, 12%, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .refresh-btn:hover {
+            background: var(--card);
+            border-color: hsl(213, 94%, 68%, 0.5);
+        }
+
+        .refresh-btn.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 48px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--muted-foreground);
+            max-width: 700px;
+            margin: 0 auto 24px;
+        }
+
+        .search-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: hsl(215, 25%, 12%, 0.5);
+            border: 1px solid hsl(215, 25%, 20%, 0.5);
+            border-radius: 8px;
+            padding: 8px 16px;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--muted-foreground);
+        }
+
+        .search-query {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Cards Grid */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .script-card {
+            background: linear-gradient(145deg, hsl(215, 25%, 14%), hsl(215, 25%, 10%));
+            border: 1px solid hsl(215, 25%, 20%, 0.5);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .script-card:hover {
+            border-color: hsl(213, 94%, 68%, 0.3);
+            box-shadow: 0 0 30px hsl(213, 94%, 68%, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .card-game {
+            font-size: 14px;
+            color: var(--muted-foreground);
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-destructive {
+            background: var(--destructive);
+            color: white;
+        }
+
+        .badge-secondary {
+            background: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .badge-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted-foreground);
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: var(--muted-foreground);
+            margin-bottom: 16px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid hsl(215, 25%, 20%, 0.5);
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--muted-foreground);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .download-btn {
+            padding: 8px;
+            background: hsl(215, 25%, 12%, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .download-btn:hover {
+            background: var(--card);
+            border-color: hsl(213, 94%, 68%, 0.5);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 0;
+            gap: 16px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--muted);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Error */
+        .error {
+            background: hsl(0, 84%, 60%, 0.1);
+            border: 1px solid hsl(0, 84%, 60%, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 32px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: hsl(0, 84%, 70%);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .no-results-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--muted-foreground);
+        }
+
+        .no-results h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--foreground);
+        }
+
+        .no-results p {
+            color: var(--muted-foreground);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid hsl(215, 25%, 20%, 0.5);
+            border-radius: 12px;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 800px;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.open .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid hsl(215, 25%, 20%, 0.5);
+        }
+
+        .modal-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .modal-close {
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: var(--muted-foreground);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .modal-close:hover {
+            background: var(--muted);
+            color: var(--foreground);
+        }
+
+        .modal-game {
+            color: var(--muted-foreground);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .modal-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 14px;
+            color: var(--muted-foreground);
+            margin-bottom: 16px;
+        }
+
+        .modal-content {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 8px;
+        }
+
+        .section p {
+            color: var(--muted-foreground);
+            line-height: 1.6;
+        }
+
+        .code-section {
+            margin-bottom: 24px;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .copy-btn {
+            background: var(--gradient-primary);
+            color: var(--primary-foreground);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .code-block {
+            background: hsl(215, 25%, 16%, 0.5);
+            border: 1px solid hsl(215, 25%, 20%, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 400px;
+            overflow: auto;
+        }
+
+        .code-block pre {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--foreground);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 64px;
+            padding: 32px 0;
+            border-top: 1px solid hsl(215, 25%, 20%, 0.5);
+            text-align: center;
+            color: var(--muted-foreground);
+            font-size: 14px;
+        }
+
+        .footer-highlight {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .truncate {
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Icons (using simple SVG replacements) */
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal {
+                width: 95vw;
+                margin: 20px;
+            }
+            
+            .card-stats {
+                gap: 12px;
+                font-size: 12px;
+            }
+            
+            .modal-stats {
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo">R</div>
-        <span>RoScript</span>
-      </div>
-      <div class="search">
-        <span class="icon i" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3-3" stroke-width="2" stroke-linecap="round"/></svg>
-        </span>
-        <input id="search" placeholder="Search for Roblox scripts..." />
-      </div>
-    </div>
-  </div>
-
-  <!-- Hero -->
-  <div class="hero">
-    <h1>RoScript Browser</h1>
-    <p>Discover and download the best Roblox scripts from ScriptBlox. Find working scripts with a clean, modern interface.</p>
-  </div>
-
-  <!-- Grid -->
-  <div class="wrap">
-    <div id="grid" class="grid"></div>
-  </div>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="sheet" role="document">
-      <div class="sheet-head">
-        <div>
-          <div class="sheet-title" id="mTitle">Title</div>
-          <div class="sheet-game" id="mGame">Game name</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">K</div>
+                <div class="logo-text">
+                    <h1>KozyScript</h1>
+                    <p>Roblox Script Browser</p>
+                </div>
+            </div>
+            
+            <form class="search-form" id="searchForm">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Search for Roblox scripts..."
+                    autocomplete="off"
+                >
+            </form>
+            
+            <button class="refresh-btn" id="refreshBtn">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </button>
         </div>
-        <span id="mPatched" class="patched" style="display:none">Patched</span>
-        <button id="close" class="sheet-close" aria-label="Close">
-          <span class="i">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M6 6l12 12M18 6l-12 12" stroke-width="2" stroke-linecap="round"/>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>KozyScript Browser</h1>
+            <p>Discover and download the best Roblox scripts from ScriptBlox. Find working scripts for your favorite games with our clean, modern interface.</p>
+            <div class="search-info hidden" id="searchInfo">
+                <span>Searching for:</span>
+                <span class="search-query" id="searchQuery"></span>
+                <span>•</span>
+                <span id="resultsCount">0 results</span>
+            </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div class="error hidden" id="errorAlert">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
             </svg>
-          </span>
-        </button>
-      </div>
-      <div class="sheet-body">
-        <div id="mDesc" class="sheet-desc"></div>
-        <pre id="mCode" class="code">Loading script…</pre>
-        <div class="actions">
-          <button id="copy" class="btn primary">
-            <span class="i" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="9" y="9" width="13" height="13" rx="2" stroke-width="2"/>
-                <rect x="2" y="2" width="13" height="13" rx="2" stroke-width="2"/>
-              </svg>
-            </span>
-            Copy Script
-          </button>
-          <a id="openPage" class="btn" href="#" target="_blank" rel="noopener">Open on ScriptBlox</a>
+            <span id="errorMessage">Failed to load scripts. Please try again.</span>
         </div>
-      </div>
+
+        <!-- Loading State -->
+        <div class="loading hidden" id="loadingState">
+            <div class="spinner"></div>
+            <p id="loadingText">Loading scripts...</p>
+        </div>
+
+        <!-- Scripts Grid -->
+        <div class="scripts-grid" id="scriptsGrid"></div>
+
+        <!-- No Results -->
+        <div class="no-results hidden" id="noResults">
+            <div class="no-results-icon">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                </svg>
+            </div>
+            <h3>No Scripts Found</h3>
+            <p id="noResultsMessage">No scripts are currently available. Try refreshing the page.</p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                KozyScript Browser • Browse Roblox scripts safely • 
+                <span class="footer-highlight">Always verify scripts before use</span>
+            </p>
+        </footer>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title-row">
+                    <div>
+                        <h2 class="modal-title" id="modalTitle">Script Title</h2>
+                        <p class="modal-game" id="modalGame"></p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="badge badge-destructive hidden" id="modalPatchedBadge">Patched</span>
+                        <button class="modal-close" id="modalClose">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="modal-stats" id="modalStats"></div>
+                <div class="tags" id="modalTags"></div>
+            </div>
+            
+            <div class="modal-content">
+                <div class="section" id="descriptionSection">
+                    <h3>Description</h3>
+                    <p id="modalDescription"></p>
+                </div>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <h3>Script Code</h3>
+                        <button class="copy-btn" id="copyBtn">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            Copy Script
+                        </button>
+                    </div>
+                    <div class="code-block">
+                        <pre id="scriptCode"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div id="toast" class="toast">Copied!</div>
+    <script>
+        // Mock Scripts Data
+        const mockScripts = [
+            {
+                id: "1",
+                title: "Universal Script Hub",
+                description: "A comprehensive script hub with multiple game support including Arsenal, Phantom Forces, and more. Features auto-aim, ESP, speed hacks and other popular features.",
+                author: "ScriptMaster",
+                game: "Universal",
+                views: 125000,
+                likes: 8500,
+                created: "2024-01-15",
+                isPatched: false,
+                tags: ["Universal", "GUI", "Auto-Aim", "ESP"],
+                scriptContent: `-- Universal Script Hub
+-- By ScriptMaster
 
-<script>
-  // ---------- helpers ----------
-  const $ = sel => document.querySelector(sel);
-  const grid = $('#grid');
-  const searchInput = $('#search');
-  const modal = $('#modal');
-  const mTitle = $('#mTitle');
-  const mGame = $('#mGame');
-  const mPatched = $('#mPatched');
-  const mDesc = $('#mDesc');
-  const mCode = $('#mCode');
-  const copyBtn = $('#copy');
-  const openPage = $('#openPage');
-  const closeBtn = $('#close');
-  const toast = $('#toast');
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
-  let ALL = []; // cache of scripts
-  function clamp(str, n){
-    if(!str) return '';
-    return str.length > n ? str.slice(0, n - 1) + '…' : str;
-  }
-  function nfmt(n){
-    if(!n && n !== 0) return '0';
-    if(n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
-    if(n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
-    return String(n);
-  }
-  function fmtDate(iso){
-    try{ return new Date(iso).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}catch{ return '';}
-  }
-  function pill(iconSvg, text){
-    return `
-      <div class="pill">
-        <span class="i">${iconSvg}</span>
-        <span>${text}</span>
-      </div>`;
-  }
-  const eyeSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke-width="2"/></svg>`;
-  const heartSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" stroke-width="2" stroke-linejoin="round"/></svg>`;
-  const calSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2" stroke-width="2"/><path d="M16 3v4M8 3v4M3 11h18" stroke-width="2" stroke-linecap="round"/></svg>`;
+local localPlayer = Players.LocalPlayer
+print("Universal Script Hub Loaded!")
 
-  // ---------- fetch & render ----------
-  async function fetchScripts(){
-    // ScriptBlox: 20 most recent
-    const res = await fetch('https://scriptblox.com/api/script/fetch');
-    const data = await res.json();
-    ALL = (data?.result?.scripts) || [];
-    render(ALL);
-  }
+-- Auto-Aim Function
+local function getClosestPlayer()
+    local closestPlayer = nil
+    local shortestDistance = math.huge
+    
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (localPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                closestPlayer = player
+            end
+        end
+    end
+    
+    return closestPlayer
+end
 
-  function render(list){
-    grid.innerHTML = '';
-    list.forEach(s => {
-      const gameName = s?.game?.name || s?.game || 'Universal';
-      const tags = [];
-      if (gameName) tags.push(gameName);
-      (s?.keywords || []).slice(0,2).forEach(k => tags.push(k));
+-- ESP Function
+local function createESP(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local esp = Instance.new("BillboardGui")
+        esp.Name = "ESP"
+        esp.Parent = player.Character.Head
+        esp.Size = UDim2.new(0, 100, 0, 50)
+        esp.StudsOffset = Vector3.new(0, 3, 0)
+        
+        local frame = Instance.new("Frame")
+        frame.Parent = esp
+        frame.Size = UDim2.new(1, 0, 1, 0)
+        frame.BackgroundTransparency = 1
+        
+        local nameLabel = Instance.new("TextLabel")
+        nameLabel.Parent = frame
+        nameLabel.Size = UDim2.new(1, 0, 1, 0)
+        nameLabel.BackgroundTransparency = 1
+        nameLabel.Text = player.Name
+        nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        nameLabel.TextStrokeTransparency = 0
+        nameLabel.Font = Enum.Font.SourceSansBold
+        nameLabel.TextSize = 14
+    end
+end
 
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.innerHTML = `
-        ${s.isPatched ? `<span class="patched">Patched</span>` : ``}
-        <div class="title">${clamp(s.title || 'Untitled Script', 56)}</div>
-        <div class="subtitle">${gameName}</div>
-        <div class="desc">${clamp(s.description || 'No description available.', 220)}</div>
+print("Script loaded successfully!")`
+            },
+            {
+                id: "2",
+                title: "Arsenal Aimbot & ESP",
+                description: "Advanced Arsenal script with smooth aimbot, wallhacks, ESP, and weapon modifications. Updated for latest Arsenal version.",
+                author: "CombatHacker",
+                game: "Arsenal",
+                views: 89000,
+                likes: 6200,
+                created: "2024-02-01",
+                isPatched: false,
+                tags: ["Arsenal", "Aimbot", "ESP", "Wallhack"],
+                scriptContent: `-- Arsenal Advanced Script
+-- Features: Aimbot, ESP, Wallhacks
 
-        <div class="chips">
-          ${tags.slice(0,3).map(t=>`<span class="chip">${t}</span>`).join('')}
-        </div>
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+local UserInputService = game:GetService("UserInputService")
 
-        <div class="stats">
-          ${pill(eyeSVG, nfmt(s.views || 0))}
-          ${pill(heartSVG, nfmt(s.likes || 0))}
-          ${pill(calSVG, fmtDate(s.createdAt || s.updatedAt))}
-        </div>
-      `;
-      el.addEventListener('click', () => openSheet(s));
-      grid.appendChild(el);
-    });
-  }
+local localPlayer = Players.LocalPlayer
+local aimbotEnabled = true
+local espEnabled = true
 
-  // Try to obtain script code (the /fetch payload sometimes does not include it)
-  async function getScriptCode(s){
-    // 1) present property
-    if (s.script || s.scriptText || s.content) return s.script || s.scriptText || s.content;
+print("Arsenal Script Loaded!")
 
-    // 2) try by slug (common)
-    if (s.slug){
-      try{
-        const r = await fetch(`https://scriptblox.com/api/script/details?slug=${encodeURIComponent(s.slug)}`);
-        const d = await r.json();
-        const code = d?.result?.script || d?.result?.scriptText || d?.script;
-        if (code) return code;
-      }catch(_){}
-    }
-    // 3) try by id as a fallback (some deployments)
-    if (s._id){
-      try{
-        const r = await fetch(`https://scriptblox.com/api/script/details/${encodeURIComponent(s._id)}`);
-        const d = await r.json();
-        const code = d?.result?.script || d?.script;
-        if (code) return code;
-      }catch(_){}
-    }
-    // 4) give up
-    return null;
-  }
+-- Aimbot Configuration
+local aimbotSettings = {
+    FOV = 100,
+    Smoothness = 0.2,
+    TargetPart = "Head"
+}
 
-  async function openSheet(s){
-    mTitle.textContent = s.title || 'Untitled Script';
-    mGame.textContent = s?.game?.name || s?.game || 'Universal';
-    mPatched.style.display = s.isPatched ? 'inline-block' : 'none';
-    mDesc.textContent = s.description || 'No description available.';
-    mCode.textContent = 'Loading script…';
-    openPage.href = s.slug ? `https://scriptblox.com/script/${encodeURIComponent(s.slug)}` : 'https://scriptblox.com/';
+-- Main Aimbot Function
+local function aimbot()
+    if not aimbotEnabled then return end
+    
+    local target = getClosestPlayerInFOV()
+    if target and target.Character and target.Character:FindFirstChild(aimbotSettings.TargetPart) then
+        local targetPosition = target.Character[aimbotSettings.TargetPart].Position
+        local cameraPosition = Camera.CFrame.Position
+        local direction = (targetPosition - cameraPosition).unit
+        
+        Camera.CFrame = Camera.CFrame:lerp(
+            CFrame.lookAt(cameraPosition, targetPosition),
+            aimbotSettings.Smoothness
+        )
+    end
+end
 
-    modal.style.display = 'grid';
-    document.body.style.overflow = 'hidden';
+-- ESP System
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= localPlayer then
+        createESP(player)
+    end
+end
 
-    const code = await getScriptCode(s);
-    mCode.textContent = code || 'No script content available. Open on ScriptBlox to view.';
-    copyBtn.onclick = () => {
-      if (!code){ showToast('No script to copy'); return; }
-      navigator.clipboard.writeText(code).then(()=>showToast('Copied!'));
-    };
-  }
+game:GetService("RunService").Heartbeat:Connect(aimbot)`
+            },
+            {
+                id: "3",
+                title: "Blox Fruits Auto Farm",
+                description: "Complete auto-farming script for Blox Fruits with level detection, quest automation, and fruit collection. Safe and undetectable.",
+                author: "FarmBot2024",
+                game: "Blox Fruits",
+                views: 234000,
+                likes: 15600,
+                created: "2024-01-28",
+                isPatched: true,
+                tags: ["Blox Fruits", "Auto Farm", "Quests", "Fruits"],
+                scriptContent: `-- Blox Fruits Auto Farm Script
+-- WARNING: This script has been patched!
 
-  function closeSheet(){
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-  closeBtn.addEventListener('click', closeSheet);
-  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeSheet(); });
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local localPlayer = Players.LocalPlayer
 
-  // search
-  searchInput.addEventListener('input', e=>{
-    const q = e.target.value.trim().toLowerCase();
-    if(!q) { render(ALL); return; }
-    const filtered = ALL.filter(s =>
-      (s.title || '').toLowerCase().includes(q) ||
-      (s?.game?.name || s?.game || '').toLowerCase().includes(q) ||
-      (s.description || '').toLowerCase().includes(q)
-    );
-    render(filtered);
-  });
+print("Blox Fruits Auto Farm - PATCHED VERSION")
+print("This script may not work due to recent game updates")
 
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    clearTimeout(showToast.t);
-    showToast.t = setTimeout(()=> toast.style.display='none', 1400);
-  }
+-- Auto Farm Configuration
+local farmSettings = {
+    autoFarm = true,
+    autoQuest = true,
+    safeMode = true,
+    targetLevel = 2450
+}
 
-  // init
-  fetchScripts().catch(err=>{
-    console.error(err);
-    grid.innerHTML = `<div style="grid-column:1/-1; padding:18px; background:#121a26; border:1px solid var(--border); border-radius:14px;">Failed to load scripts. Check CORS or try again later.</div>`;
-  });
-</script>
+-- Quest System (May be patched)
+local function getQuest()
+    -- This function has been patched by Roblox anti-cheat
+    print("Quest system currently unavailable due to patches")
+end
+
+-- Farm Loop (Basic version)
+spawn(function()
+    while farmSettings.autoFarm do
+        wait(1)
+        print("Auto farming... (Limited functionality due to patches)")
+        -- Basic farming logic here
+    end
+end)
+
+print("Note: Consider using updated scripts from trusted sources")`
+            },
+            {
+                id: "4",
+                title: "Phantom Forces Aimbot",
+                description: "Highly accurate aimbot for Phantom Forces with customizable settings, silent aim, and anti-detection features.",
+                author: "TacticalShooter",
+                game: "Phantom Forces",
+                views: 67000,
+                likes: 4100,
+                created: "2024-02-10",
+                isPatched: false,
+                tags: ["Phantom Forces", "Aimbot", "Silent Aim"],
+                scriptContent: `-- Phantom Forces Advanced Aimbot
+-- Features: Silent Aim, Smooth Tracking
+
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+local Mouse = Players.LocalPlayer:GetMouse()
+
+print("Phantom Forces Aimbot Loaded!")
+
+local settings = {
+    silentAim = true,
+    fov = 90,
+    smoothness = 0.15,
+    targetBone = "Head"
+}
+
+-- Silent Aim Function
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+    
+    if method == "FireServer" and settings.silentAim then
+        -- Modify bullet trajectory for silent aim
+        local target = getClosestTarget()
+        if target then
+            args[2] = target.Character.Head.Position
+        end
+    end
+    
+    return oldNamecall(self, unpack(args))
+end)
+
+print("Silent aim active - shooting will auto-target enemies")`
+            },
+            {
+                id: "5",
+                title: "Da Hood Mod Menu",
+                description: "Complete mod menu for Da Hood with teleports, money farming, anti-admin, and custom animations. Regular updates included.",
+                author: "HoodScripter",
+                game: "Da Hood",
+                views: 156000,
+                likes: 9800,
+                created: "2024-02-05",
+                isPatched: false,
+                tags: ["Da Hood", "Mod Menu", "Teleports", "Money"],
+                scriptContent: `-- Da Hood Ultimate Mod Menu
+-- By HoodScripter
+
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local localPlayer = Players.LocalPlayer
+
+print("Da Hood Mod Menu Loading...")
+
+-- GUI Creation
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local TitleLabel = Instance.new("TextLabel")
+
+ScreenGui.Name = "DaHoodMenu"
+ScreenGui.Parent = localPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Main Frame Setup
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.Active = true
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
+MainFrame.Draggable = true
+
+-- Money Farm Function
+local function farmMoney()
+    print("Money farming activated!")
+    -- Da Hood money farming logic
+    while true do
+        wait(0.1)
+        -- Auto collect money drops
+        for _, v in pairs(workspace:GetChildren()) do
+            if v.Name == "MoneyDrop" then
+                localPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                wait(0.1)
+            end
+        end
+    end
+end
+
+-- Teleport Functions
+local locations = {
+    ["Bank"] = Vector3.new(-1097, 23, -287),
+    ["Gun Shop"] = Vector3.new(-1521, 23, -217),
+    ["Barbershop"] = Vector3.new(-1348, 23, -1035)
+}
+
+for name, position in pairs(locations) do
+    print("Teleport available: " .. name)
+end
+
+print("Da Hood Mod Menu Loaded Successfully!")`
+            },
+            {
+                id: "6",
+                title: "Pet Simulator X Duplication",
+                description: "Working pet and gem duplication script for Pet Simulator X. Includes auto-hatch, mailbox stealer, and more advanced features.",
+                author: "PetMaster99",
+                game: "Pet Simulator X",
+                views: 198000,
+                likes: 12300,
+                created: "2024-01-20",
+                isPatched: true,
+                tags: ["Pet Sim X", "Duplication", "Auto Hatch", "Gems"],
+                scriptContent: `-- Pet Simulator X Script
+-- WARNING: Duplication methods patched!
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local localPlayer = Players.LocalPlayer
+
+print("Pet Simulator X Script - Some features may be patched")
+
+-- Pet Functions (Limited due to patches)
+local function autoHatch()
+    print("Auto-hatch feature may be limited due to anti-cheat")
+    -- Basic auto-hatch implementation
+    while true do
+        wait(1)
+        -- Attempt to hatch eggs
+    end
+end
+
+-- Gem Functions (Patched)
+local function duplicateGems()
+    print("Gem duplication has been patched by developers")
+    print("This function is no longer working")
+end
+
+-- Safe Features (Still working)
+local function autoCollect()
+    print("Auto-collect orbs activated")
+    -- Collect nearby orbs and coins
+    spawn(function()
+        while true do
+            wait(0.1)
+            for _, orb in pairs(workspace.Orbs:GetChildren()) do
+                if orb:IsA("Part") then
+                    -- Teleport to orb
+                    localPlayer.Character.HumanoidRootPart.CFrame = orb.CFrame
+                end
+            end
+        end
+    end)
+end
+
+print("Note: Some features patched - use at your own risk")`
+            }
+        ];
+
+        // State
+        let currentScripts = [];
+        let currentSearchQuery = "";
+        let isLoading = false;
+
+        // DOM Elements
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const searchInfo = document.getElementById('searchInfo');
+        const searchQuery = document.getElementById('searchQuery');
+        const resultsCount = document.getElementById('resultsCount');
+        const errorAlert = document.getElementById('errorAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        const loadingState = document.getElementById('loadingState');
+        const loadingText = document.getElementById('loadingText');
+        const scriptsGrid = document.getElementById('scriptsGrid');
+        const noResults = document.getElementById('noResults');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalGame = document.getElementById('modalGame');
+        const modalPatchedBadge = document.getElementById('modalPatchedBadge');
+        const modalStats = document.getElementById('modalStats');
+        const modalTags = document.getElementById('modalTags');
+        const modalDescription = document.getElementById('modalDescription');
+        const scriptCode = document.getElementById('scriptCode');
+        const copyBtn = document.getElementById('copyBtn');
+        const modalClose = document.getElementById('modalClose');
+
+        // Utility Functions
+        function formatNumber(num) {
+            if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+            if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+            return num.toString();
+        }
+
+        function formatDate(dateString) {
+            try {
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch {
+                return 'Unknown';
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Mock API
+        const scriptBloxAPI = {
+            async getScripts(page = 1, limit = 20) {
+                await delay(800);
+                const startIndex = (page - 1) * limit;
+                const endIndex = startIndex + limit;
+                return mockScripts.slice(startIndex, endIndex);
+            },
+
+            async searchScripts(query, page = 1, limit = 20) {
+                await delay(600);
+                
+                if (!query.trim()) {
+                    return this.getScripts(page, limit);
+                }
+
+                const filtered = mockScripts.filter(script => 
+                    script.title.toLowerCase().includes(query.toLowerCase()) ||
+                    script.description.toLowerCase().includes(query.toLowerCase()) ||
+                    script.game?.toLowerCase().includes(query.toLowerCase()) ||
+                    script.author.toLowerCase().includes(query.toLowerCase()) ||
+                    script.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+                );
+
+                const startIndex = (page - 1) * limit;
+                const endIndex = startIndex + limit;
+                return filtered.slice(startIndex, endIndex);
+            }
+        };
+
+        // UI Functions
+        function showElement(element) {
+            element.classList.remove('hidden');
+        }
+
+        function hideElement(element) {
+            element.classList.add('hidden');
+        }
+
+        function setLoading(loading) {
+            isLoading = loading;
+            if (loading) {
+                showElement(loadingState);
+                refreshBtn.classList.add('spinning');
+                hideElement(scriptsGrid);
+                hideElement(noResults);
+                hideElement(errorAlert);
+            } else {
+                hideElement(loadingState);
+                refreshBtn.classList.remove('spinning');
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            showElement(errorAlert);
+            hideElement(scriptsGrid);
+            hideElement(noResults);
+            hideElement(loadingState);
+        }
+
+        function updateSearchInfo(query, count) {
+            if (query) {
+                searchQuery.textContent = query;
+                resultsCount.textContent = `${count} results`;
+                showElement(searchInfo);
+            } else {
+                hideElement(searchInfo);
+            }
+        }
+
+        function createScriptCard(script) {
+            const card = document.createElement('div');
+            card.className = 'script-card';
+            card.onclick = () => openModal(script);
+
+            const patchedBadge = script.isPatched ? 
+                '<span class="badge badge-destructive">Patched</span>' : '';
+
+            const tagsHtml = script.tags.slice(0, 3).map(tag => 
+                `<span class="badge badge-secondary">${tag}</span>`
+            ).join('');
+
+            const moreTags = script.tags.length > 3 ? 
+                `<span class="badge badge-outline">+${script.tags.length - 3} more</span>` : '';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <h3 class="card-title">${script.title}</h3>
+                        ${script.game ? `<p class="card-game">${script.game}</p>` : ''}
+                    </div>
+                    ${patchedBadge}
+                </div>
+                
+                <p class="card-description">${script.description || 'No description available'}</p>
+                
+                <div class="tags">
+                    ${tagsHtml}
+                    ${moreTags}
+                </div>
+                
+                <div class="card-footer">
+                    <div class="card-stats">
+                        <div class="stat">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            <span>${formatNumber(script.views)}</span>
+                        </div>
+                        <div class="stat">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <span class="truncate">${script.author}</span>
+                        </div>
+                        <div class="stat">
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h.75a.75.75 0 01.75.75v.75h2.5V6h-.25V4.25a.25.25 0 00-.25-.25h-1V3h1.25a1.25 1.25 0 011.25 1.25V6h-.25v2.5H22v.75a.75.75 0 01-.75.75h-.75v4.5h.75a.75.75 0 01.75.75V17H20v.25a1.25 1.25 0 01-1.25 1.25H17v-1h1.25a.25.25 0 00.25-.25V15h-2.5v.75a.75.75 0 01-.75.75H14v-2.25h1.25V8H17V6h1.25v2H20v1.25h-.75a.75.75 0 01-.75-.75V8H17v1.25H15.75a.75.75 0 01-.75-.75V7.25H14V4.75A1.25 1.25 0 0112.75 3.5H11.25A1.25 1.25 0 0110 4.75V7.25H8.75a.75.75 0 01-.75.75V9.25H7V8H6.75V6H8v2h1.25V6H10v1.25H11.25V8H13v5.25H11.25V14H10v1.25H8.75a.75.75 0 01-.75-.75V14H6.75v1.25H6v-.75a.75.75 0 01.75-.75H7.5V10H6.75a.75.75 0 01-.75-.75V8H4v.25a1.25 1.25 0 01-1.25 1.25H2V8h.75a.25.25 0 00.25-.25V6H2v-.25A1.25 1.25 0 013.25 4.5H4v1h-.75a.25.25 0 00-.25.25V7H4.5v1.25a.75.75 0 01.75.75H6v2.5H4.75a.75.75 0 01-.75-.75V10H2v.25a1.25 1.25 0 011.25 1.25H4v1h-.75a.25.25 0 00-.25-.25V11H2v.25A1.25 1.25 0 003.25 12.5H4v1h-.75A1.25 1.25 0 012 12.25V11h1.25v.25a.25.25 0 00.25.25H4v-1H2.75A1.25 1.25 0 012 9.25V8h1.25v.25a.25.25 0 00.25.25H4V7H2.75A1.25 1.25 0 012 5.75V4h1.25v.25a.25.25 0 00.25.25H4V3h-.75A1.25 1.25 0 012 4.25V6H.75a.75.75 0 01-.75-.75V4.25A2.25 2.25 0 012.25 2H4v1H2.25a.25.25 0 00-.25.25V4h1.25V2.75A1.25 1.25 0 014.5 1.5H6v1H4.5a.25.25 0 00-.25.25V4H5.5V2.75A1.25 1.25 0 016.75 1.5H8v1H6.75a.25.25 0 00-.25.25V4H7.5V2.75A1.25 1.25 0 018.75 1.5H10v1H8.75a.25.25 0 00-.25.25V4H9.5V2.75A1.25 1.25 0 0110.75 1.5H12v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0112.75 1.5H14v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0114.75 1.5H16v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0116.75 1.5H18v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0118.75 1.5H20v1h-1.25a.25.25 0 00-.25.25V4h1.25V2.25A2.25 2.25 0 0021.75 0H24v1.25a1.25 1.25 0 01-1.25 1.25H22v1.25a.25.25 0 00.25.25H24V5.25A2.25 2.25 0 0121.75 7.5H20V6h1.75a.25.25 0 00.25-.25V4.25a.25.25 0 00-.25-.25H20V2.75A1.25 1.25 0 0018.75 1.5H17v1h1.75a.25.25 0 00.25.25v1.5a.25.25 0 00.25.25H21v1.25a.25.25 0 00.25.25H23v1.25a1.25 1.25 0 01-1.25 1.25H20v1h1.75A2.25 2.25 0 0024 6.25V8h-1.25a1.25 1.25 0 01-1.25-1.25V6H20v1.25a.25.25 0 00.25.25H22V8.5a1.25 1.25 0 01-1.25 1.25H19v1h1.75A2.25 2.25 0 0023 8.5V10h-1.25a1.25 1.25 0 01-1.25-1.25V8H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 8.25V10H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 10.25V12H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 12.25V14H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 14.25V16H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 16.25V18H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 18.25V20H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 20.25V22H19v.75a.75.75 0 01-.75.75H17v.25A2.25 2.25 0 0114.75 24H8v-1h6.75a1.25 1.25 0 001.25-1.25V21H14v1h1.75a.25.25 0 00.25-.25V20H14v1h1.75a.25.25 0 00.25-.25V19H14v1h1.75a.25.25 0 00.25-.25V18H14v1h1.75a.25.25 0 00.25-.25V17H14v1h1.75a.25.25 0 00.25-.25V16H14v1h1.75a.25.25 0 00.25-.25V15H14v1h1.75a.25.25 0 00.25-.25V14H14v1h1.75a.25.25 0 00.25-.25V13H14v1h1.75a.25.25 0 00.25-.25V12H14v1h1.75a.25.25 0 00.25-.25V11H14v1h1.75a.25.25 0 00.25-.25V10H14v1h1.75a.25.25 0 00.25-.25V9H14v1h1.75a.25.25 0 00.25-.25V8H14V6.75A1.25 1.25 0 0012.75 5.5H11.25A1.25 1.25 0 0010 6.75V8H8.75a.75.75 0 01-.75-.75V6H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v.25A2.25 2.25 0 005.75 24H0v-1.25A1.25 1.25 0 011.25 21.5H2v-1H.75A2.25 2.25 0 01-1.5 18.25V16H0v.75a1.25 1.25 0 001.25 1.25H2v-1H.75A2.25 2.25 0 01-1.5 14.25V12H0v.75a1.25 1.25 0 001.25 1.25H2v-1H.75A2.25 2.25 0 01-1.5 10.25V8H0v.75a1.25 1.25 0 001.25 1.25H2V9H.75A2.25 2.25 0 01-1.5 6.25V4H0v.75A1.25 1.25 0 001.25 6H2V5H.75A2.25 2.25 0 01-1.5 2.25V0H5.75A2.25 2.25 0 018 2.25V4H6.75a1.25 1.25 0 00-1.25 1.25V6H4.75a.75.75 0 00-.75.75V8H2.75A1.25 1.25 0 001.5 9.25V10H0v-.25A2.25 2.25 0 012.25 7.5H4V6H2.25a.25.25 0 01-.25-.25V4.25a.25.25 0 01.25-.25H4V2.75A1.25 1.25 0 015.25 1.5H6v1H5.25a.25.25 0 00-.25.25V4H6V2.75A1.25 1.25 0 017.25 1.5H8v1H7.25a.25.25 0 00-.25.25V4H8V2.75A1.25 1.25 0 019.25 1.5H10v1H9.25a.25.25 0 00-.25.25V4H10V2.75A1.25 1.25 0 0111.25 1.5H12v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0112.75 1.5H14v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0114.75 1.5H16v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0116.75 1.5H18v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0118.75 1.5H20v1h-1.25a.25.25 0 00-.25.25V4h1.25V2.25A2.25 2.25 0 0122.25 0H24v2.25A2.25 2.25 0 0121.75 4.5H20V6h1.75a.25.25 0 00.25-.25V4.25a.25.25 0 00-.25-.25H20V2.25A1.25 1.25 0 0118.75 1H17v1h1.75a.25.25 0 00.25.25v1.5a.25.25 0 00.25.25H21v1.5a.25.25 0 00.25.25H23v2A2.25 2.25 0 0120.75 9H19V8h1.75a.25.25 0 00.25-.25V6.25a.25.25 0 00-.25-.25H19V4.75A1.25 1.25 0 0017.75 3.5H16v1h1.75a.25.25 0 00.25.25V6H16V4.75A1.25 1.25 0 0014.75 3.5H13v1h1.75a.25.25 0 00.25.25V6H13V4.75A1.25 1.25 0 0011.75 3.5H10v1h1.75a.25.25 0 00.25.25V6H10V4.75A1.25 1.25 0 008.75 3.5H7v1h1.75a.25.25 0 00.25.25V6H7V4.75A1.25 1.25 0 005.75 3.5H4v1h1.75a.25.25 0 00.25.25V6H4V4.25A2.25 2.25 0 011.75 2H0v2.25A2.25 2.25 0 002.25 6.5H4V8H2.25a.25.25 0 01-.25-.25V6.25a.25.25 0 01.25-.25H4V4.25A1.25 1.25 0 015.25 3H6v1H5.25a.25.25 0 00-.25.25V6H6V4.25A1.25 1.25 0 017.25 3H8v1H7.25a.25.25 0 00-.25.25V6H8V4.25A1.25 1.25 0 019.25 3H10v1H9.25a.25.25 0 00-.25.25V6H10V4.25A1.25 1.25 0 0111.25 3H12v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0112.75 3H14v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0114.75 3H16v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0116.75 3H18v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0118.75 3H20v1h-1.25a.25.25 0 00-.25.25V6h1.25V4.25A2.25 2.25 0 0122.25 2H24v2.25A2.25 2.25 0 0121.75 6.5H20V8h1.75a.25.25 0 00.25-.25V6.25a.25.25 0 00-.25-.25H20V4.75A1.25 1.25 0 0118.75 3.5H17v1h1.75a.25.25 0 00.25.25V6H17V4.75A1.25 1.25 0 0015.75 3.5H14v1h1.75a.25.25 0 00.25.25V6H14V4.75A1.25 1.25 0 0012.75 3.5H11v1h1.75a.25.25 0 00.25.25V6H11V4.75A1.25 1.25 0 009.75 3.5H8v1h1.75a.25.25 0 00.25.25V6H8V4.75A1.25 1.25 0 006.75 3.5H5v1h1.75a.25.25 0 00.25.25V6H5V4.25A2.25 2.25 0 012.75 2H1v2.25A2.25 2.25 0 003.25 6.5H5V8H3.25a.25.25 0 01-.25-.25V6.25a.25.25 0 01.25-.25H5V4.25A1.25 1.25 0 016.25 3H7v1H6.25a.25.25 0 00-.25.25V6H7V4.25A1.25 1.25 0 018.25 3H9v1H8.25a.25.25 0 00-.25.25V6H9V4.25A1.25 1.25 0 0110.25 3H11v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0111.75 3H13v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0113.75 3H15v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0115.75 3H17v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0117.75 3H19v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0119.75 3H21v1h-1.25a.25.25 0 00-.25.25V6h1.25V4.25A2.25 2.25 0 0123.25 2H24v2.25A2.25 2.25 0 0122.75 6.5H21V8h1.75a.25.25 0 00.25-.25V6.25a.25.25 0 00-.25-.25H21V4.75A1.25 1.25 0 0119.75 3.5H18v1h1.75a.25.25 0 00.25.25V6H18V4.75A1.25 1.25 0 0016.75 3.5H15v1h1.75a.25.25 0 00.25.25V6H15V4.75A1.25 1.25 0 0013.75 3.5H12v1h1.75a.25.25 0 00.25.25V6H12V4.75A1.25 1.25 0 0010.75 3.5H9v1h1.75a.25.25 0 00.25.25V6H9V4.75A1.25 1.25 0 007.75 3.5H6v1h1.75a.25.25 0 00.25.25V6H6V4.25A2.25 2.25 0 013.75 2H2v2.25A2.25 2.25 0 004.25 6.5H6V8H4.25a.25.25 0 01-.25-.25V6.25a.25.25 0 01.25-.25H6V4.25A1.25 1.25 0 017.25 3H8v1H7.25a.25.25 0 00-.25.25V6H8V4.25A1.25 1.25 0 019.25 3H10v1H9.25a.25.25 0 00-.25.25V6H10V4.25A1.25 1.25 0 0111.25 3H12v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0112.75 3H14v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0114.75 3H16v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0116.75 3H18v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0118.75 3H20v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0120.75 3H22v1h-1.25a.25.25 0 00-.25.25V6h1.25V4.25A2.25 2.25 0 0124.25 2H24"/>
+                            </svg>
+                            <span>${new Date(script.created).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    
+                    <button class="download-btn" onclick="event.stopPropagation(); openModal(arguments[0])" data-script='${JSON.stringify(script)}'>
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function renderScripts(scripts) {
+            scriptsGrid.innerHTML = '';
+            
+            if (scripts.length === 0) {
+                showElement(noResults);
+                noResultsMessage.textContent = currentSearchQuery 
+                    ? `No scripts found matching "${currentSearchQuery}". Try a different search term.`
+                    : "No scripts are currently available. Try refreshing the page.";
+                hideElement(scriptsGrid);
+                return;
+            }
+
+            hideElement(noResults);
+            showElement(scriptsGrid);
+            
+            scripts.forEach(script => {
+                const card = createScriptCard(script);
+                scriptsGrid.appendChild(card);
+            });
+        }
+
+        function openModal(script) {
+            modalTitle.textContent = script.title;
+            modalGame.textContent = script.game || '';
+            modalDescription.textContent = script.description;
+            scriptCode.textContent = script.scriptContent;
+
+            if (script.isPatched) {
+                showElement(modalPatchedBadge);
+            } else {
+                hideElement(modalPatchedBadge);
+            }
+
+            // Stats
+            modalStats.innerHTML = `
+                <div class="stat">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span>${script.author}</span>
+                </div>
+                <div class="stat">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <span>${formatNumber(script.views)} views</span>
+                </div>
+                <div class="stat">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                    <span>${formatNumber(script.likes)} likes</span>
+                </div>
+                <div class="stat">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h.75a.75.75 0 01.75.75v.75h2.5V6h-.25V4.25a.25.25 0 00-.25-.25h-1V3h1.25a1.25 1.25 0 011.25 1.25V6h-.25v2.5H22v.75a.75.75 0 01-.75.75h-.75v4.5h.75a.75.75 0 01.75.75V17H20v.25a1.25 1.25 0 01-1.25 1.25H17v-1h1.25a.25.25 0 00.25-.25V15h-2.5v.75a.75.75 0 01-.75.75H14v-2.25h1.25V8H17V6h1.25v2H20v1.25h-.75a.75.75 0 01-.75-.75V8H17v1.25H15.75a.75.75 0 01-.75-.75V7.25H14V4.75A1.25 1.25 0 0112.75 3.5H11.25A1.25 1.25 0 0110 4.75V7.25H8.75a.75.75 0 01-.75.75V9.25H7V8H6.75V6H8v2h1.25V6H10v1.25H11.25V8H13v5.25H11.25V14H10v1.25H8.75a.75.75 0 01-.75-.75V14H6.75v1.25H6v-.75a.75.75 0 01.75-.75H7.5V10H6.75a.75.75 0 01-.75-.75V8H4v.25a1.25 1.25 0 01-1.25 1.25H2V8h.75a.25.25 0 00.25-.25V6H2v-.25A1.25 1.25 0 013.25 4.5H4v1h-.75a.25.25 0 00-.25.25V7H4.5v1.25a.75.75 0 01.75.75H6v2.5H4.75a.75.75 0 01-.75-.75V10H2v.25a1.25 1.25 0 011.25 1.25H4v1h-.75a.25.25 0 00-.25-.25V11H2v.25A1.25 1.25 0 003.25 12.5H4v1h-.75A1.25 1.25 0 012 12.25V11h1.25v.25a.25.25 0 00.25.25H4v-1H2.75A1.25 1.25 0 012 9.25V8h1.25v.25a.25.25 0 00.25.25H4V7H2.75A1.25 1.25 0 012 5.75V4h1.25v.25a.25.25 0 00.25.25H4V3h-.75A1.25 1.25 0 012 4.25V6H.75a.75.75 0 01-.75-.75V4.25A2.25 2.25 0 012.25 2H4v1H2.25a.25.25 0 00-.25.25V4h1.25V2.75A1.25 1.25 0 014.5 1.5H6v1H4.5a.25.25 0 00-.25.25V4H5.5V2.75A1.25 1.25 0 016.75 1.5H8v1H6.75a.25.25 0 00-.25.25V4H7.5V2.75A1.25 1.25 0 018.75 1.5H10v1H8.75a.25.25 0 00-.25.25V4H9.5V2.75A1.25 1.25 0 0110.75 1.5H12v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0112.75 1.5H14v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0114.75 1.5H16v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0116.75 1.5H18v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0118.75 1.5H20v1h-1.25a.25.25 0 00-.25.25V4h1.25V2.25A2.25 2.25 0 0121.75 0H24v1.25a1.25 1.25 0 01-1.25 1.25H22v1.25a.25.25 0 00.25.25H24V5.25A2.25 2.25 0 0121.75 7.5H20V6h1.75a.25.25 0 00.25-.25V4.25a.25.25 0 00-.25-.25H20V2.75A1.25 1.25 0 0018.75 1.5H17v1h1.75a.25.25 0 00.25.25v1.5a.25.25 0 00.25.25H21v1.25a.25.25 0 00.25.25H23v1.25a1.25 1.25 0 01-1.25 1.25H20v1h1.75A2.25 2.25 0 0024 6.25V8h-1.25a1.25 1.25 0 01-1.25-1.25V6H20v1.25a.25.25 0 00.25.25H22V8.5a1.25 1.25 0 01-1.25 1.25H19v1h1.75A2.25 2.25 0 0023 8.5V10h-1.25a1.25 1.25 0 01-1.25-1.25V8H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 8.25V10H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 10.25V12H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 12.25V14H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 14.25V16H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 16.25V18H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 18.25V20H19v.75a.75.75 0 01-.75.75H17v1h1.25A2.25 2.25 0 0020.5 20.25V22H19v.75a.75.75 0 01-.75.75H17v.25A2.25 2.25 0 0114.75 24H8v-1h6.75a1.25 1.25 0 001.25-1.25V21H14v1h1.75a.25.25 0 00.25-.25V20H14v1h1.75a.25.25 0 00.25-.25V19H14v1h1.75a.25.25 0 00.25-.25V18H14v1h1.75a.25.25 0 00.25-.25V17H14v1h1.75a.25.25 0 00.25-.25V16H14v1h1.75a.25.25 0 00.25-.25V15H14v1h1.75a.25.25 0 00.25-.25V14H14v1h1.75a.25.25 0 00.25-.25V13H14v1h1.75a.25.25 0 00.25-.25V12H14v1h1.75a.25.25 0 00.25-.25V11H14v1h1.75a.25.25 0 00.25-.25V10H14v1h1.75a.25.25 0 00.25-.25V9H14v1h1.75a.25.25 0 00.25-.25V8H14V6.75A1.25 1.25 0 0012.75 5.5H11.25A1.25 1.25 0 0010 6.75V8H8.75a.75.75 0 01-.75-.75V6H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v1H6.75v1.25a.25.25 0 00.25.25H8v.25A2.25 2.25 0 005.75 24H0v-1.25A1.25 1.25 0 011.25 21.5H2v-1H.75A2.25 2.25 0 01-1.5 18.25V16H0v.75a1.25 1.25 0 001.25 1.25H2v-1H.75A2.25 2.25 0 01-1.5 14.25V12H0v.75a1.25 1.25 0 001.25 1.25H2v-1H.75A2.25 2.25 0 01-1.5 10.25V8H0v.75a1.25 1.25 0 001.25 1.25H2V9H.75A2.25 2.25 0 01-1.5 6.25V4H0v.75A1.25 1.25 0 001.25 6H2V5H.75A2.25 2.25 0 01-1.5 2.25V0H5.75A2.25 2.25 0 018 2.25V4H6.75a1.25 1.25 0 00-1.25 1.25V6H4.75a.75.75 0 00-.75.75V8H2.75A1.25 1.25 0 001.5 9.25V10H0v-.25A2.25 2.25 0 012.25 7.5H4V6H2.25a.25.25 0 01-.25-.25V4.25a.25.25 0 01.25-.25H4V2.75A1.25 1.25 0 015.25 1.5H6v1H5.25a.25.25 0 00-.25.25V4H6V2.75A1.25 1.25 0 017.25 1.5H8v1H7.25a.25.25 0 00-.25.25V4H8V2.75A1.25 1.25 0 019.25 1.5H10v1H9.25a.25.25 0 00-.25.25V4H10V2.75A1.25 1.25 0 0111.25 1.5H12v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0112.75 1.5H14v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0114.75 1.5H16v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0116.75 1.5H18v1h-1.25a.25.25 0 00-.25.25V4h1V2.75A1.25 1.25 0 0118.75 1.5H20v1h-1.25a.25.25 0 00-.25.25V4h1.25V2.25A2.25 2.25 0 0122.25 0H24v2.25A2.25 2.25 0 0121.75 4.5H20V6h1.75a.25.25 0 00.25-.25V4.25a.25.25 0 00-.25-.25H20V2.25A1.25 1.25 0 0118.75 1H17v1h1.75a.25.25 0 00.25.25v1.5a.25.25 0 00.25.25H21v1.5a.25.25 0 00.25.25H23v2A2.25 2.25 0 0120.75 9H19V8h1.75a.25.25 0 00.25-.25V6.25a.25.25 0 00-.25-.25H19V4.75A1.25 1.25 0 0017.75 3.5H16v1h1.75a.25.25 0 00.25.25V6H16V4.75A1.25 1.25 0 0014.75 3.5H13v1h1.75a.25.25 0 00.25.25V6H13V4.75A1.25 1.25 0 0011.75 3.5H10v1h1.75a.25.25 0 00.25.25V6H10V4.75A1.25 1.25 0 008.75 3.5H7v1h1.75a.25.25 0 00.25.25V6H7V4.75A1.25 1.25 0 005.75 3.5H4v1h1.75a.25.25 0 00.25.25V6H4V4.25A2.25 2.25 0 011.75 2H0v2.25A2.25 2.25 0 002.25 6.5H4V8H2.25a.25.25 0 01-.25-.25V6.25a.25.25 0 01.25-.25H4V4.25A1.25 1.25 0 015.25 3H6v1H5.25a.25.25 0 00-.25.25V6H6V4.25A1.25 1.25 0 017.25 3H8v1H7.25a.25.25 0 00-.25.25V6H8V4.25A1.25 1.25 0 019.25 3H10v1H9.25a.25.25 0 00-.25.25V6H10V4.25A1.25 1.25 0 0111.25 3H12v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0112.75 3H14v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0114.75 3H16v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0116.75 3H18v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0118.75 3H20v1h-1.25a.25.25 0 00-.25.25V6h1V4.25A1.25 1.25 0 0120.75 3H22v1h-1.25a.25.25 0 00-.25.25V6h1.25V4.25A2.25 2.25 0 0124.25 2H24"/>
+                    </svg>
+                    <span>${formatDate(script.created)}</span>
+                </div>
+            `;
+
+            // Tags
+            modalTags.innerHTML = script.tags.map(tag => 
+                `<span class="badge badge-secondary">${tag}</span>`
+            ).join('');
+
+            modalOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+            
+            // Reset copy button
+            copyBtn.innerHTML = `
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                Copy Script
+            `;
+            copyBtn.classList.remove('copied');
+        }
+
+        async function copyToClipboard() {
+            try {
+                await navigator.clipboard.writeText(scriptCode.textContent);
+                copyBtn.innerHTML = `
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Copied!
+                `;
+                copyBtn.classList.add('copied');
+                
+                // Show toast notification
+                showToast('Script copied to clipboard!', 'success');
+                
+                setTimeout(() => {
+                    if (copyBtn.classList.contains('copied')) {
+                        copyBtn.innerHTML = `
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            Copy Script
+                        `;
+                        copyBtn.classList.remove('copied');
+                    }
+                }, 2000);
+            } catch (error) {
+                showToast('Failed to copy to clipboard', 'error');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            // Simple toast implementation
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? 'hsl(0, 84%, 60%)' : type === 'success' ? 'hsl(142, 71%, 45%)' : 'hsl(213, 94%, 68%)'};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                    document.head.removeChild(style);
+                }, 300);
+            }, 3000);
+        }
+
+        // Main Functions
+        async function loadScripts() {
+            try {
+                setLoading(true);
+                hideElement(errorAlert);
+                const data = await scriptBloxAPI.getScripts();
+                currentScripts = data;
+                renderScripts(data);
+                updateSearchInfo(currentSearchQuery, data.length);
+            } catch (error) {
+                showError("Failed to load scripts. Please try again.");
+                console.error("Error loading scripts:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function handleSearch(query) {
+            try {
+                setLoading(true);
+                hideElement(errorAlert);
+                currentSearchQuery = query;
+                loadingText.textContent = query ? "Searching scripts..." : "Loading scripts...";
+                
+                const data = query.trim() 
+                    ? await scriptBloxAPI.searchScripts(query)
+                    : await scriptBloxAPI.getScripts();
+                
+                currentScripts = data;
+                renderScripts(data);
+                updateSearchInfo(query, data.length);
+            } catch (error) {
+                showError("Search failed. Please try again.");
+                console.error("Error searching scripts:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function handleRefresh() {
+            if (currentSearchQuery) {
+                handleSearch(currentSearchQuery);
+            } else {
+                loadScripts();
+            }
+        }
+
+        // Event Listeners
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleSearch(searchInput.value);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value.length === 0) {
+                handleSearch("");
+            }
+        });
+
+        refreshBtn.addEventListener('click', handleRefresh);
+        modalClose.addEventListener('click', closeModal);
+        copyBtn.addEventListener('click', copyToClipboard);
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('open')) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScripts();
+        });
+
+        // Make openModal global for onclick handlers
+        window.openModal = openModal;
+    </script>
 </body>
 </html>
